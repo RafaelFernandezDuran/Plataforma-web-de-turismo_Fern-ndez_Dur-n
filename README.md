@@ -1,61 +1,214 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌿 Chanchamayo Tours
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Plataforma web de turismo para Chanchamayo, Perú**
 
-## About Laravel
+Marketplace digital que conecta empresas turísticas locales con visitantes interesados en explorar la región de Chanchamayo. Sistema completo de gestión de tours, reservas online y experiencias de aventura en la naturaleza.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Características Principales
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Para Turistas
+- 🔍 **Explorar Tours**: Catálogo completo con filtros avanzados por categoría, precio, duración y dificultad
+- 📋 **Información Detallada**: Itinerarios completos, servicios incluidos/excluidos, galería de fotos
+- 💳 **Sistema de Reservas**: Booking online con selección de fechas y número de participantes
+- ⭐ **Reseñas y Calificaciones**: Sistema de valoraciones y comentarios
+- 📱 **Diseño Responsive**: Optimizado para móviles, tablets y desktop
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Para Empresas Turísticas
+- 🏢 **Registro de Empresa**: Proceso de alta como operador turístico verificado
+- ✏️ **Gestión de Tours**: CRUD completo - crear, editar, publicar y gestionar tours
+- 📊 **Dashboard Empresarial**: Panel de control con estadísticas y métricas
+- 📅 **Gestión de Reservas**: Administración completa de bookings recibidos
+- 🎯 **Control de Estado**: Activar/desactivar tours y gestionar disponibilidad
 
-## Learning Laravel
+## 🛠️ Stack Tecnológico
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Backend
+- ![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=flat&logo=laravel&logoColor=white) **Framework PHP moderno**
+- ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) **Base de datos relacional**
+- ![Eloquent](https://img.shields.io/badge/Eloquent-ORM-FF2D20?style=flat) **Mapeo objeto-relacional**
+- ![Laravel Auth](https://img.shields.io/badge/Laravel-Auth-FF2D20?style=flat) **Sistema de autenticación multi-rol**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Frontend
+- ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white) **Estructura semántica moderna**
+- ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white) **Estilos avanzados con Flexbox/Grid**
+- ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) **Vanilla JS para máximo rendimiento**
+- ![Font Awesome](https://img.shields.io/badge/Font_Awesome-528DD7?style=flat&logo=fontawesome&logoColor=white) **Iconografía profesional**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Herramientas de Desarrollo
+- ![Composer](https://img.shields.io/badge/Composer-885630?style=flat&logo=composer&logoColor=white) **Gestión de dependencias PHP**
+- ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) **Control de versiones**
+- ![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=flat&logo=visualstudiocode&logoColor=white) **Editor de desarrollo**
 
-## Laravel Sponsors
+## 📁 Arquitectura del Proyecto
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+chanchamayo-tours/
+├── 📁 app/
+│   ├── Http/Controllers/     # Lógica de controladores MVC
+│   ├── Models/              # Modelos Eloquent y relaciones
+│   └── Providers/           # Proveedores de servicios Laravel
+├── 📁 database/
+│   ├── migrations/          # Esquemas de base de datos
+│   ├── seeders/            # Datos de prueba y producción
+│   └── factories/          # Factories para testing
+├── 📁 public/
+│   ├── css/                # Estilos CSS organizados
+│   ├── images/             # Assets e imágenes
+│   └── index.php           # Punto de entrada público
+├── 📁 resources/
+│   └── views/              # Templates Blade organizados
+├── 📁 routes/
+│   └── web.php             # Definición de rutas web
+└── 📁 storage/            # Logs y archivos temporales
+```
 
-### Premium Partners
+## 🎨 Características de Diseño
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- **🎭 Diseño Moderno**: Interfaz premium con efectos glassmorphism y gradientes
+- **📱 Mobile-First**: Completamente responsive y optimizado para móviles
+- **⚡ Microinteracciones**: Animaciones fluidas y transiciones suaves
+- **♿ Accesibilidad**: Navegación por teclado, semántica HTML5 y ARIA labels
+- **🚀 Performance**: Lazy loading de imágenes y optimización de recursos
 
-## Contributing
+## 📊 Modelo de Base de Datos
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Entidades Principales
+- **👥 Users**: Sistema de usuarios con roles diferenciados
+- **🏢 Companies**: Perfil completo de empresas turísticas
+- **🗺️ Tours**: Catálogo detallado con ubicación, precios y servicios
+- **📂 TourCategories**: Taxonomía de tipos de turismo
+- **📋 Bookings**: Sistema de reservas con estados y tracking
+- **⭐ Reviews**: Reseñas, calificaciones y experiencias de usuarios
 
-## Code of Conduct
+## 🚀 Guía de Instalación
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Prerrequisitos del Sistema
+- **PHP >= 8.2** con extensiones requeridas
+- **Composer** para gestión de dependencias
+- **MySQL/MariaDB** como base de datos
+- **XAMPP/LAMP/WAMP** (opcional para desarrollo local)
 
-## Security Vulnerabilities
+### Proceso de Instalación
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **📥 Clonar Repositorio**
+   ```bash
+   git clone https://github.com/RafaelFernandezDuran/Plataforma-web-de-turismo_Fern-ndez_Dur-n.git
+   cd Plataforma-web-de-turismo_Fern-ndez_Dur-n
+   ```
 
-## License
+2. **📦 Instalar Dependencias**
+   ```bash
+   composer install
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **⚙️ Configurar Variables de Entorno**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **🗄️ Configurar Base de Datos**
+   Editar archivo `.env` con credenciales:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=chanchamayo_tours
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. **🏗️ Ejecutar Migraciones y Datos de Prueba**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+6. **🌐 Iniciar Servidor de Desarrollo**
+   ```bash
+   php artisan serve
+   ```
+
+7. **✅ Acceder a la Aplicación**
+   - **URL Principal**: http://localhost:8000
+   - **Panel Admin**: http://localhost:8000/dashboard
+
+## 📋 Funcionalidades Implementadas
+
+### ✅ Sistema de Autenticación
+- Registro y login multi-rol (usuarios/empresas)
+- Middleware de protección de rutas
+- Gestión de sesiones seguras
+
+### ✅ Gestión Completa de Tours
+- CRUD completo con validaciones
+- Sistema de categorización avanzado
+- Filtros dinámicos y búsqueda
+- Galería de imágenes con lightbox
+- Estados de publicación (borrador/activo/inactivo)
+
+### ✅ Sistema de Reservas
+- Booking online con calendario
+- Gestión de disponibilidad
+- Estados de reserva trackeable
+- Notificaciones automáticas
+
+### ✅ Experiencia de Usuario Premium
+- Diseño responsive y accesible
+- Navegación intuitiva y moderna
+- Efectos visuales y microinteracciones
+- Optimización móvil completa
+
+## 🎯 Objetivos y Valor del Proyecto
+
+1. **🌍 Digitalización Turística**: Modernizar la industria turística de Chanchamayo
+2. **🤝 Conectividad**: Facilitar encuentro entre turistas y operadores locales
+3. **💡 Innovación**: Aplicar tecnologías web modernas al turismo regional  
+4. **🌱 Sostenibilidad**: Promover turismo responsable y consciente
+
+## 📈 Métricas del Proyecto
+
+- **📄 Líneas de Código**: ~5,000+ líneas
+- **🗂️ Archivos**: 195 archivos organizados
+- **📊 Tablas BD**: 8 entidades principales
+- **🎨 Componentes UI**: 25+ componentes reutilizables
+- **📱 Breakpoints**: 5 puntos de responsive design
+
+## 👨‍💻 Desarrollador
+
+**Rafael Fernández Durán**
+- 📧 Email: [contacto@ejemplo.com](mailto:contacto@ejemplo.com)
+- 🐙 GitHub: [@RafaelFernandezDuran](https://github.com/RafaelFernandezDuran)
+- 💼 LinkedIn: [Perfil Profesional](https://linkedin.com/in/rafael-fernandez-duran)
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la **MIT License** - ver el archivo [LICENSE](LICENSE) for details.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas y apreciadas:
+
+1. **🍴 Fork** el proyecto
+2. **🌟 Crea** una rama para tu feature (`git checkout -b feature/NewFeature`)
+3. **💾 Commit** tus cambios (`git commit -m 'Add NewFeature'`)
+4. **📤 Push** a la rama (`git push origin feature/NewFeature`)
+5. **🔄 Abre** un Pull Request
+
+---
+
+## 🌟 Agradecimientos
+
+- **Laravel Team** por el excelente framework
+- **Comunidad Open Source** por las herramientas utilizadas
+- **Región Chanchamayo** por la inspiración turística
+
+---
+
+<div align="center">
+
+**⭐ ¡Dale una estrella si te gusta el proyecto! ⭐**
+
+[![GitHub stars](https://img.shields.io/github/stars/RafaelFernandezDuran/Plataforma-web-de-turismo_Fern-ndez_Dur-n?style=social)](https://github.com/RafaelFernandezDuran/Plataforma-web-de-turismo_Fern-ndez_Dur-n)
+
+</div>
