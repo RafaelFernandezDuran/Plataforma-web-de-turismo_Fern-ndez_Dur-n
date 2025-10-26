@@ -13,72 +13,35 @@ class Company extends Model
     protected $fillable = [
         'name',
         'slug',
-        'legal_name',
         'description',
         'email',
         'phone',
-        'emergency_phone',
         'address',
         'city',
         'region',
-        'postal_code',
-        'latitude',
-        'longitude',
         'ruc',
-        'registration_number',
-        'tax_id',
         'logo',
         'gallery',
-        'documents',
-        'business_license',
-        'tourism_license',
-        'insurance_certificate',
-        'website',
-        'social_media',
         'contact_person',
-        'contact_position',
-        'specialties',
-        'services',
-        'languages',
-        'founded_year',
-        'employee_count',
-        'min_group_size',
-        'max_group_size',
-        'certifications',
-        'awards',
         'commission_rate',
         'status',
         'registration_status',
-        'rejection_reason',
         'rating',
         'total_reviews',
         'user_id',
         'verified_at',
         'submitted_at',
-        'reviewed_at',
-        'reviewed_by',
-        'notification_preferences',
         'terms_accepted',
         'terms_accepted_at',
     ];
 
     protected $casts = [
         'gallery' => 'array',
-        'documents' => 'array',
-        'social_media' => 'array',
-        'services' => 'array',
-        'languages' => 'array',
-        'certifications' => 'array',
-        'awards' => 'array',
-        'notification_preferences' => 'array',
         'commission_rate' => 'decimal:2',
         'rating' => 'decimal:2',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8',
         'terms_accepted' => 'boolean',
         'verified_at' => 'datetime',
         'submitted_at' => 'datetime',
-        'reviewed_at' => 'datetime',
         'terms_accepted_at' => 'datetime',
     ];
 
@@ -129,11 +92,6 @@ class Company extends Model
         return $query->where('region', $region);
     }
 
-    public function scopeByServices($query, $services)
-    {
-        return $query->whereJsonContains('services', $services);
-    }
-
     // Mutators y Accessors
     public function setNameAttribute($value)
     {
@@ -182,14 +140,8 @@ class Company extends Model
 
     public function getFullAddressAttribute()
     {
-        $parts = array_filter([$this->address, $this->city, $this->region, $this->postal_code]);
+        $parts = array_filter([$this->address, $this->city, $this->region]);
         return implode(', ', $parts);
-    }
-
-    // Relación con reviewer
-    public function reviewer()
-    {
-        return $this->belongsTo(User::class, 'reviewed_by');
     }
 
     // Métodos de utilidad
@@ -205,8 +157,8 @@ class Company extends Model
 
     public function hasRequiredDocuments()
     {
-        return !empty($this->business_license) && 
-               !empty($this->logo) && 
-               !empty($this->ruc);
+        return !empty($this->logo) &&
+               !empty($this->ruc) &&
+               !empty($this->address);
     }
 }

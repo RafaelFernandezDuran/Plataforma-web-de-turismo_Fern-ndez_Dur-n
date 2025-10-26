@@ -3,190 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tours - Chanchamayo Tours</title>
+    <title>Tours | Chanchamayo Tours</title>
+    <meta name="description" content="Descubre experiencias únicas en Chanchamayo. Explora tours de aventura, cultura y naturaleza seleccionados para ti.">
+    <meta property="og:title" content="Explora los mejores tours en Chanchamayo">
+    <meta property="og:description" content="Planea tu próxima aventura con nuestra selección curada de tours inolvidables en Chanchamayo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7cVUDTyh13jRaYf0cwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="{{ asset('css/chanchamayo.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tours-fixed.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <meta name="description" content="Descubre los mejores tours y experiencias en Chanchamayo. Aventura, naturaleza y cultura te esperan.">
-    <meta name="og:title" content="Tours - Chanchamayo Tours">
-    <meta name="og:description" content="Explora la belleza natural y cultural de Chanchamayo con nuestros tours cuidadosamente seleccionados">
-    <link rel="preload" as="font" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" crossorigin>
 </head>
+@php
+    $searchTerm = request('search');
+    $activeFilters = collect([
+        'search' => $searchTerm,
+        'category' => request('category'),
+        'price_max' => request('price_max'),
+        'duration' => request('duration'),
+        'difficulty' => request('difficulty'),
+    ])->filter();
+    $categoryName = $categories->firstWhere('slug', request('category'))?->name;
+    $durationMap = [
+        '1' => '1 día',
+        '2' => '2 días',
+        '3' => '3 días',
+        '4' => '4+ días',
+    ];
+@endphp
 <body class="tours-page">
-    <!-- Header Premium -->
-    <header class="header-sticky" role="banner">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="/" class="logo" aria-label="Chanchamayo Tours - Inicio">
-                    <i class="fas fa-mountain" aria-hidden="true"></i>
-                    <span>Chanchamayo Tours</span>
-                </a>
-            </div>
-            
-            <!-- Mobile menu button -->
-            <button class="mobile-menu-toggle" aria-controls="main-navigation" aria-expanded="false" aria-label="Abrir menú de navegación">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-            </button>
-            
-            <nav class="nav" id="main-navigation" role="navigation">
-                <ul class="nav-links">
-                    <li><a href="/" class="nav-link"><span>Inicio</span></a></li>
-                    <li><a href="{{ route('tours.index') }}" class="nav-link active" aria-current="page"><span>Tours</span></a></li>
-                    <li><a href="#categorias" class="nav-link"><span>Categorías</span></a></li>
-                    <li><a href="{{ route('company.register') }}" class="nav-link"><span>Registrar Empresa</span></a></li>
-                    <li><a href="#contacto" class="nav-link"><span>Contacto</span></a></li>
-                    @auth
-                        <li><a href="/dashboard" class="nav-link"><span>Dashboard</span></a></li>
-                        <li><a href="{{ route('bookings.index') }}" class="nav-link"><span>Mis Reservas</span></a></li>
-                    @else
-                        <li><a href="/login" class="nav-link"><span>Iniciar Sesión</span></a></li>
-                        <li>
-                            <a href="/register" class="btn btn-primary">
-                                <i class="fas fa-user-plus" aria-hidden="true"></i>
-                                <span>Registrarse</span>
-                            </a>
-                        </li>
-                    @endauth
-                </ul>
+    <header class="tours-header" id="site-header">
+        <div class="container header-inner">
+            <a href="{{ url('/') }}" class="brand">
+                <span class="brand-icon" aria-hidden="true"><i class="fas fa-globe-americas"></i></span>
+                <span class="brand-text">Chanchamayo Tours</span>
+            </a>
+            <nav class="main-nav" id="main-navigation" aria-label="Navegación principal">
+                <a href="{{ url('/') }}" class="nav-link">Inicio</a>
+                <a href="#experiencias" class="nav-link">Experiencias</a>
+                <a href="#categorias" class="nav-link">Categorías</a>
+                <a href="#planifica" class="nav-link">Planifica</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
             </nav>
+            <div class="header-actions">
+                <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
+                <a href="{{ route('company.register') }}" class="btn btn-primary">Registrar empresa</a>
+                <button class="mobile-menu-toggle" aria-expanded="false" aria-controls="main-navigation" aria-label="Abrir menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="tours-hero" role="banner">
-        <div class="hero-background"></div>
-        <div class="container">
-            <div class="tours-hero-content">
-                <h1 class="hero-title">Descubre Tours Increíbles</h1>
-                <p class="hero-subtitle">Explora la belleza natural y cultural de Chanchamayo con nuestros tours cuidadosamente seleccionados</p>
-                
-                <!-- Search Bar -->
-                <form class="search-form" method="GET" role="search">
-                    <div class="search-input-wrapper">
-                        <label for="search-tours" class="sr-only">Buscar tours</label>
-                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                        <input 
-                            type="text" 
-                            id="search-tours"
-                            name="search" 
-                            class="search-input" 
-                            placeholder="Buscar tours, destinos o actividades..." 
-                            value="{{ request('search') }}"
-                            aria-describedby="search-hint"
-                        >
+    <main>
+        <section class="hero" id="experiencias">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <div class="hero-pretitle">Explora Chanchamayo</div>
+                    <h1 class="hero-title">Tu próxima aventura comienza aquí</h1>
+                    <p class="hero-description">
+                        Encuentra tours diseñados por expertos locales, con rutas seguras, experiencias auténticas y la mejor selección de operadores certificados.
+                    </p>
+                    <div class="hero-metrics">
+                        <div class="metric-card">
+                            <span class="metric-value">{{ number_format($tours->total()) }}</span>
+                            <span class="metric-label">Tours activos</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">{{ $categories->count() }}</span>
+                            <span class="metric-label">Categorías</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value">4.8</span>
+                            <span class="metric-label">Satisfacción promedio</span>
+                        </div>
                     </div>
-                    <button type="submit" class="search-btn">
-                        <span>Buscar</span>
-                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                    </button>
-                </form>
-                <div class="search-suggestion">
-                    <span class="search-hint-text">Ej: cataratas, café, rafting</span>
+                </div>
+
+                <div class="hero-search">
+                    <form method="GET" class="search-form" aria-label="Buscador de tours">
+                        <label for="search-input" class="search-label">¿Qué experiencia buscas?</label>
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input id="search-input" name="search" type="search" value="{{ $searchTerm }}" placeholder="Selva, rafting, café, cascadas..." autocomplete="off">
+                            @if($activeFilters->isNotEmpty())
+                                <button type="button" class="search-clear" aria-label="Limpiar búsqueda" onclick="clearSearch()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            @endif
+                        </div>
+                        <div class="search-hints" id="search-hints" aria-live="polite">
+                            <span class="search-hint">Aventura</span>
+                            <span class="search-hint">Cataratas</span>
+                            <span class="search-hint">Café</span>
+                            <span class="search-hint">Selva</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary search-submit">
+                            <span>Buscar tours</span>
+                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                    <div class="trust-badges" aria-label="Beneficios principales">
+                        <div class="trust-item"><i class="fas fa-shield-alt"></i> Operadores verificados</div>
+                        <div class="trust-item"><i class="fas fa-leaf"></i> Turismo responsable</div>
+                        <div class="trust-item"><i class="fas fa-headset"></i> Soporte 24/7</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Filters Section -->
-    <section class="filters-section" role="region" aria-label="Filtros de búsqueda">
-        <div class="container">
-            <div class="filters-toolbar">
-                <!-- Mobile filter toggle -->
-                <button class="filter-toggle mobile-only" aria-controls="filters-form" aria-expanded="false">
-                    <i class="fas fa-filter" aria-hidden="true"></i>
-                    <span>Filtros</span>
-                    <span class="filter-count" id="active-filters-count"></span>
-                </button>
-                
-                <!-- Active filters chips -->
-                @if(request()->hasAny(['category', 'price_min', 'price_max', 'duration', 'difficulty', 'search']))
-                <div class="active-filters" aria-live="polite">
-                    @if(request('search'))
-                        <span class="filter-chip">
-                            <i class="fas fa-search"></i>
-                            "{{ request('search') }}"
-                            <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" class="filter-chip-remove" aria-label="Quitar búsqueda">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    @endif
-                    @if(request('category'))
-                        <span class="filter-chip">
-                            <i class="fas fa-tag"></i>
-                            {{ $categories->where('slug', request('category'))->first()->name ?? request('category') }}
-                            <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de categoría">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    @endif
-                    @if(request('price_min') || request('price_max'))
-                        <span class="filter-chip">
-                            <i class="fas fa-dollar-sign"></i>
-                            S/{{ request('price_min', '0') }} - S/{{ request('price_max', '500+') }}
-                            <a href="{{ request()->fullUrlWithQuery(['price_min' => null, 'price_max' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de precio">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    @endif
-                    @if(request('duration'))
-                        <span class="filter-chip">
-                            <i class="fas fa-clock"></i>
-                            {{ request('duration') }} día{{ request('duration') > 1 ? 's' : '' }}
-                            <a href="{{ request()->fullUrlWithQuery(['duration' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de duración">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    @endif
-                    @if(request('difficulty'))
-                        <span class="filter-chip">
-                            <i class="fas fa-signal"></i>
-                            {{ ucfirst(request('difficulty')) }}
-                            <a href="{{ request()->fullUrlWithQuery(['difficulty' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de dificultad">
-                                <i class="fas fa-times" aria-hidden="true"></i>
-                            </a>
-                        </span>
-                    @endif
-                    <button class="clear-all-filters" onclick="window.location.href='{{ route('tours.index') }}'">
-                        <i class="fas fa-times-circle"></i>
-                        Limpiar todo
+        <section class="filters-section" aria-label="Filtros de búsqueda">
+            <div class="container">
+                <div class="filters-header">
+                    <div class="filters-title">
+                        <i class="fas fa-sliders-h" aria-hidden="true"></i>
+                        <div>
+                            <h2>Personaliza tu experiencia</h2>
+                            <p>Refina los resultados según tus intereses y presupuesto</p>
+                        </div>
+                    </div>
+                    <button class="filter-toggle" aria-expanded="false" aria-controls="filters-form">
+                        <span>Filtros</span>
+                        <span class="filter-count" id="active-filters-count"></span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
                 </div>
+
+                @if($activeFilters->isNotEmpty())
+                    <div class="active-filters" role="status" aria-live="polite">
+                        <span class="active-filters-label">Filtros aplicados:</span>
+                        @if($searchTerm)
+                            <span class="filter-chip">
+                                <i class="fas fa-search"></i>
+                                "{{ $searchTerm }}"
+                                <a href="{{ request()->fullUrlWithQuery(['search' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de búsqueda">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        @endif
+                        @if(request('category'))
+                            <span class="filter-chip">
+                                <i class="fas fa-tag"></i>
+                                {{ $categoryName ?? ucfirst(request('category')) }}
+                                <a href="{{ request()->fullUrlWithQuery(['category' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de categoría">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        @endif
+                        @if(request('price_max'))
+                            <span class="filter-chip">
+                                <i class="fas fa-wallet"></i>
+                                Hasta S/ {{ number_format((int) request('price_max')) }}
+                                <a href="{{ request()->fullUrlWithQuery(['price_max' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de precio">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        @endif
+                        @if(request('duration'))
+                            <span class="filter-chip">
+                                <i class="fas fa-clock"></i>
+                                {{ $durationMap[request('duration')] ?? request('duration').' días' }}
+                                <a href="{{ request()->fullUrlWithQuery(['duration' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de duración">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        @endif
+                        @if(request('difficulty'))
+                            <span class="filter-chip">
+                                <i class="fas fa-signal"></i>
+                                {{ ucfirst(request('difficulty')) }}
+                                <a href="{{ request()->fullUrlWithQuery(['difficulty' => null]) }}" class="filter-chip-remove" aria-label="Quitar filtro de dificultad">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                        @endif
+                        <button class="clear-all-filters" onclick="window.location.href='{{ route('tours.index') }}'">
+                            <i class="fas fa-times-circle"></i>
+                            Limpiar todo
+                        </button>
+                    </div>
                 @endif
-                
+
                 <form method="GET" class="filters-form" id="filters-form">
-                    <input type="hidden" name="search" value="{{ request('search') }}">
-                    
+                    <input type="hidden" name="search" value="{{ $searchTerm }}">
                     <div class="filter-grid">
                         <div class="filter-group">
                             <label for="category-select" class="filter-label">Categoría</label>
-                            <select name="category" id="category-select" class="filter-select">
-                                <option value="">Todas las categorías</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->slug }}" 
-                                            {{ request('category') === $category->slug ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="select-wrapper">
+                                <select name="category" id="category-select" class="filter-select">
+                                    <option value="">Todas las categorías</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->slug }}" {{ request('category') === $category->slug ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </div>
                         </div>
 
                         <div class="filter-group">
-                            <label class="filter-label">Precio (S/)</label>
-                            <div class="price-slider-container">
-                                <input type="range" name="price_range" 
-                                       min="0" max="500" step="10"
-                                       value="{{ request('price_max', 250) }}" 
-                                       class="price-range-slider"
-                                       id="priceSlider"
-                                       aria-label="Seleccionar precio máximo">
-                                <div class="price-labels">
-                                    <span>S/ 0</span>
-                                    <span>S/ 500+</span>
+                            <label class="filter-label" for="priceSlider">Precio máximo (S/)</label>
+                            <div class="price-slider">
+                                <div class="price-input">
+                                    <input type="range" id="priceSlider" name="price_range" min="0" max="500" step="10" value="{{ request('price_max', 250) }}" aria-describedby="priceValue">
+                                    <div class="price-rail">
+                                        <span>S/ 0</span>
+                                        <span>S/ 500+</span>
+                                    </div>
                                 </div>
-                                <div class="price-current">
-                                    Hasta: <span id="priceValue">S/ {{ request('price_max', 250) }}</span>
+                                <div class="price-display">
+                                    <span>Hasta</span>
+                                    <strong id="priceValue">S/ {{ request('price_max', 250) }}</strong>
                                 </div>
                                 <input type="hidden" name="price_max" id="priceMaxInput" value="{{ request('price_max') }}">
                             </div>
@@ -194,591 +223,473 @@
 
                         <div class="filter-group">
                             <label for="duration-select" class="filter-label">Duración</label>
-                            <select name="duration" id="duration-select" class="filter-select">
-                                <option value="">Cualquier duración</option>
-                                <option value="1" {{ request('duration') === '1' ? 'selected' : '' }}>1 día</option>
-                                <option value="2" {{ request('duration') === '2' ? 'selected' : '' }}>2 días</option>
-                                <option value="3" {{ request('duration') === '3' ? 'selected' : '' }}>3 días</option>
-                                <option value="4" {{ request('duration') >= '4' ? 'selected' : '' }}>4+ días</option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select name="duration" id="duration-select" class="filter-select">
+                                    <option value="">Cualquier duración</option>
+                                    <option value="1" {{ request('duration') === '1' ? 'selected' : '' }}>1 día</option>
+                                    <option value="2" {{ request('duration') === '2' ? 'selected' : '' }}>2 días</option>
+                                    <option value="3" {{ request('duration') === '3' ? 'selected' : '' }}>3 días</option>
+                                    <option value="4" {{ request('duration') === '4' ? 'selected' : '' }}>4+ días</option>
+                                </select>
+                                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </div>
                         </div>
 
                         <div class="filter-group">
                             <label for="difficulty-select" class="filter-label">Dificultad</label>
-                            <select name="difficulty" id="difficulty-select" class="filter-select">
-                                <option value="">Cualquier nivel</option>
-                                <option value="easy" {{ request('difficulty') === 'easy' ? 'selected' : '' }}>Fácil</option>
-                                <option value="moderate" {{ request('difficulty') === 'moderate' ? 'selected' : '' }}>Moderado</option>
-                                <option value="hard" {{ request('difficulty') === 'hard' ? 'selected' : '' }}>Difícil</option>
-                                <option value="expert" {{ request('difficulty') === 'expert' ? 'selected' : '' }}>Experto</option>
-                            </select>
+                            <div class="select-wrapper">
+                                <select name="difficulty" id="difficulty-select" class="filter-select">
+                                    <option value="">Todos los niveles</option>
+                                    <option value="easy" {{ request('difficulty') === 'easy' ? 'selected' : '' }}>Fácil</option>
+                                    <option value="moderate" {{ request('difficulty') === 'moderate' ? 'selected' : '' }}>Moderado</option>
+                                    <option value="hard" {{ request('difficulty') === 'hard' ? 'selected' : '' }}>Difícil</option>
+                                    <option value="expert" {{ request('difficulty') === 'expert' ? 'selected' : '' }}>Experto</option>
+                                </select>
+                                <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </div>
                         </div>
                     </div>
 
                     <div class="filter-actions">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check" aria-hidden="true"></i>
-                            <span>Aplicar Filtros</span>
-                            <span class="results-count">({{ $tours->total() }})</span>
+                            <i class="fas fa-filter" aria-hidden="true"></i>
+                            Aplicar filtros
                         </button>
                         <a href="{{ route('tours.index') }}" class="btn btn-ghost">
-                            <i class="fas fa-times" aria-hidden="true"></i>
-                            <span>Limpiar</span>
+                            <i class="fas fa-rotate-left" aria-hidden="true"></i>
+                            Restablecer
                         </a>
                     </div>
                 </form>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Tours Grid -->
-    <section class="tours-grid-section" role="main" aria-label="Lista de tours disponibles">
-        <div class="container">
-            <!-- Header movido arriba de las tarjetas -->
-            <div class="section-header">
-                <div class="results-info">
-                    <h2 class="results-title">
-                        @if(request('search'))
-                            Resultados para "<em>{{ request('search') }}</em>"
-                        @else
-                            Tours Disponibles
-                        @endif
-                    </h2>
-                    <span class="results-count" aria-live="polite">{{ $tours->total() }} tour{{ $tours->total() !== 1 ? 's' : '' }} encontrado{{ $tours->total() !== 1 ? 's' : '' }}</span>
-                </div>
-                
-                <div class="sort-wrapper">
-                    <label for="sort-select" class="sort-label">Ordenar por:</label>
-                    <select name="sort" id="sort-select" class="sort-select" onchange="location.href='{{ request()->fullUrl() }}&sort=' + this.value">
-                        <option value="featured" {{ request('sort') === 'featured' ? 'selected' : '' }}>Destacados</option>
-                        <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Precio: Menor a Mayor</option>
-                        <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Precio: Mayor a Menor</option>
-                        <option value="duration_asc" {{ request('sort') === 'duration_asc' ? 'selected' : '' }}>Duración: Corta a Larga</option>
-                        <option value="duration_desc" {{ request('sort') === 'duration_desc' ? 'selected' : '' }}>Duración: Larga a Corta</option>
-                        <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Más Recientes</option>
-                    </select>
-                </div>
-            </div>
-
-            @if($tours->count() > 0)
-                <!-- Contenedor centrado para las tarjetas -->
-                <div class="tours-grid-wrapper">
-                <div class="tours-grid" role="list" data-tours-count="{{ $tours->count() }}">
-                    @foreach($tours as $tour)
-                        <article class="tour-card" role="listitem">
-                            <div class="tour-image-container">
-                                @if($tour->optimized_image)
-                                    <img src="{{ $tour->optimized_image }}" 
-                                         alt="{{ $tour->title }}" 
-                                         class="tour-image"
-                                         loading="lazy"
-                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                    <div class="tour-image-placeholder {{ $tour->placeholder_class }}" style="display: none;">
-                                        <i class="fas {{ $tour->icon_class }}" aria-hidden="true"></i>
-                                        <span class="sr-only">{{ $tour->category->name ?? 'Tour' }} - Imagen no disponible</span>
-                                    </div>
-                                @else
-                                    <div class="tour-image-placeholder">
-                                        <i class="placeholder-icon fas {{ $tour->category->icon ?? 'fa-mountain' }}" aria-hidden="true"></i>
-                                        <div class="placeholder-text">{{ $tour->category->name ?? 'Aventura' }}</div>
-                                    </div>
-                                @endif
-                                
-                                <!-- Tour badges -->
-                                <div class="tour-badges" aria-label="Características destacadas">
-                                    @if($tour->is_featured)
-                                        <span class="badge badge-featured" aria-label="Tour destacado">
-                                            <i class="fas fa-star" aria-hidden="true"></i>
-                                            Destacado
-                                        </span>
-                                    @endif
-                                    @if($tour->discount_percentage)
-                                        <span class="badge badge-discount" aria-label="Descuento del {{ $tour->discount_percentage }}%">
-                                            <i class="fas fa-tag" aria-hidden="true"></i>
-                                            -{{ $tour->discount_percentage }}%
-                                        </span>
-                                    @endif
-                                    <span class="badge badge-difficulty badge-{{ $tour->difficulty_level }}" 
-                                          aria-label="Dificultad {{ ucfirst($tour->difficulty_level) }}">
-                                        <i class="fas fa-signal" aria-hidden="true"></i>
-                                        {{ strtoupper($tour->difficulty_level) }}
-                                    </span>
-                                </div>
-
-                                <!-- Quick actions -->
-                                <div class="tour-actions">
-                                    <button class="action-btn favorite-btn" 
-                                            aria-label="Agregar {{ $tour->title }} a favoritos"
-                                            data-tour-id="{{ $tour->id }}">
-                                        <i class="far fa-heart" aria-hidden="true"></i>
-                                    </button>
-                                    <button class="action-btn share-btn" 
-                                            aria-label="Compartir {{ $tour->title }}"
-                                            data-tour-id="{{ $tour->id }}">
-                                        <i class="fas fa-share-alt" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="tour-content">
-                                <div class="tour-category">
-                                    <i class="fas fa-tag" aria-hidden="true"></i>
-                                    <span>{{ $tour->category->name }}</span>
-                                </div>
-                                
-                                <div class="tour-rating">
-                                    <div class="stars" aria-label="Calificación {{ rand(35, 50) / 10 }} de 5 estrellas">
-                                        @php
-                                            $rating = rand(35, 50) / 10; // Rating entre 3.5 y 5.0
-                                            $fullStars = floor($rating);
-                                            $hasHalfStar = ($rating - $fullStars) >= 0.5;
-                                        @endphp
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $fullStars)
-                                                <i class="fas fa-star star" aria-hidden="true"></i>
-                                            @elseif($i == $fullStars + 1 && $hasHalfStar)
-                                                <i class="fas fa-star-half-alt star" aria-hidden="true"></i>
-                                            @else
-                                                <i class="fas fa-star star empty" aria-hidden="true"></i>
-                                            @endif
-                                        @endfor
-                                    </div>
-                                    <div class="rating-info">
-                                        <span class="rating-score">{{ number_format($rating, 1) }}</span>
-                                        <span class="rating-count">{{ rand(12, 89) }} reseñas</span>
-                                    </div>
-                                </div>
-
-                                <h3 class="tour-title">
-                                    <a href="{{ route('tours.show', $tour->slug) }}" class="tour-link">{{ $tour->title }}</a>
-                                </h3>
-
-                                <p class="tour-description">{{ Str::limit($tour->description, 120) }}</p>
-
-                                <div class="tour-details">
-                                    <div class="detail-item">
-                                        <i class="fas fa-clock" aria-hidden="true"></i>
-                                        <span>{{ $tour->duration_days }}d {{ $tour->duration_hours }}h</span>
-                                    </div>
-                                    <div class="detail-item">
-                                        <i class="fas fa-users" aria-hidden="true"></i>
-                                        <span>{{ $tour->min_participants }}-{{ $tour->max_participants }} personas</span>
-                                    </div>
-                                    <div class="detail-item">
-                                        <i class="fas fa-building" aria-hidden="true"></i>
-                                        <span>{{ $tour->company->name }}</span>
-                                    </div>
-                                </div>
-
-                                <footer class="tour-footer">
-                                    <div class="tour-price">
-                                        <span class="price-label">Desde</span>
-                                        <span class="price-amount">S/ {{ number_format($tour->price, 0) }}</span>
-                                        <span class="price-unit">por persona</span>
-                                    </div>
-
-                                    <div class="tour-cta">
-                                        <button class="btn-heart" data-tour-id="{{ $tour->id }}" aria-label="Agregar a favoritos">
-                                            <i class="far fa-heart" aria-hidden="true"></i>
-                                        </button>
-                                        <a href="{{ route('tours.show', $tour->slug) }}" class="btn btn-primary tour-details-btn">
-                                            <span>Ver Detalles</span>
-                                            <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
-                                </footer>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-                </div>
-
-                <!-- Pagination -->
-                <nav class="pagination-wrapper" aria-label="Paginación de tours" role="navigation">
-                    {{ $tours->appends(request()->query())->links() }}
-                </nav>
-            @else
-                <div class="no-results" role="status">
-                    <div class="no-results-content">
-                        <div class="no-results-icon">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </div>
-                        <h3 class="no-results-title">No se encontraron tours</h3>
-                        <p class="no-results-description">
-                            @if(request()->hasAny(['search', 'category', 'price_min', 'price_max', 'duration', 'difficulty']))
-                                Intenta ajustar tus filtros de búsqueda para encontrar más opciones.
+        <section class="tours-grid-section" role="main" aria-label="Resultados de tours">
+            <div class="container">
+                <div class="section-header">
+                    <div class="results-info">
+                        <h2 class="results-title">
+                            @if($searchTerm)
+                                Resultados para <em>{{ $searchTerm }}</em>
                             @else
-                                Actualmente no hay tours disponibles. ¡Vuelve pronto para nuevas aventuras!
+                                Tours disponibles
+                            @endif
+                        </h2>
+                        <span class="results-count" aria-live="polite">{{ $tours->total() }} tour{{ $tours->total() !== 1 ? 's' : '' }} encontrado{{ $tours->total() !== 1 ? 's' : '' }}</span>
+                    </div>
+                    <div class="sort-control">
+                        <label for="sort-select" class="sort-label">Ordenar por</label>
+                        <div class="select-wrapper">
+                            <select id="sort-select" name="sort" class="sort-select">
+                                <option value="featured" {{ request('sort', 'featured') === 'featured' ? 'selected' : '' }}>Destacados</option>
+                                <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Precio: Menor a Mayor</option>
+                                <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Precio: Mayor a Menor</option>
+                                <option value="duration_asc" {{ request('sort') === 'duration_asc' ? 'selected' : '' }}>Duración: Corta a Larga</option>
+                                <option value="duration_desc" {{ request('sort') === 'duration_desc' ? 'selected' : '' }}>Duración: Larga a Corta</option>
+                                <option value="newest" {{ request('sort') === 'newest' ? 'selected' : '' }}>Más recientes</option>
+                            </select>
+                            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+
+                @if($tours->count() > 0)
+                    <div class="tours-grid" role="list" data-tours-count="{{ $tours->count() }}">
+                        @foreach($tours as $tour)
+                            @php
+                                $category = $tour->category;
+                                $company = $tour->company;
+                                $rating = rand(36, 50) / 10;
+                                $fullStars = floor($rating);
+                                $hasHalfStar = ($rating - $fullStars) >= 0.5;
+                                $resolvedCategoryName = optional($category)->name;
+                                $resolvedCategoryIcon = optional($category)->icon;
+                                $resolvedCompanyName = optional($company)->name;
+                            @endphp
+                            <article class="tour-card" role="listitem">
+                                <div class="tour-card-media">
+                                    @if($tour->optimized_image)
+                                        <img src="{{ $tour->optimized_image }}" alt="{{ $tour->title }}" class="tour-image" loading="lazy" onerror="handleImageError(this)">
+                                    @else
+                                        <div class="tour-image-placeholder">
+                                            <i class="fas {{ $resolvedCategoryIcon ?: 'fa-mountain' }}" aria-hidden="true"></i>
+                                            <span>{{ $resolvedCategoryName ?: 'Aventura' }}</span>
+                                        </div>
+                                    @endif
+                                    <div class="tour-badges" aria-label="Destacados del tour">
+                                        @if($tour->is_featured)
+                                            <span class="badge badge-featured"><i class="fas fa-star" aria-hidden="true"></i> Destacado</span>
+                                        @endif
+                                        @if($tour->discount_percentage)
+                                            <span class="badge badge-discount"><i class="fas fa-tag" aria-hidden="true"></i> -{{ $tour->discount_percentage }}%</span>
+                                        @endif
+                                        <span class="badge badge-difficulty badge-{{ $tour->difficulty_level }}">
+                                            <i class="fas fa-signal" aria-hidden="true"></i>
+                                            {{ strtoupper($tour->difficulty_level) }}
+                                        </span>
+                                    </div>
+                                    <div class="tour-quick-actions" aria-label="Acciones rápidas">
+                                        <button class="action-btn favorite-btn" data-tour-id="{{ $tour->id }}" aria-label="Agregar {{ $tour->title }} a favoritos"><i class="far fa-heart"></i></button>
+                                        <button class="action-btn share-btn" data-tour-slug="{{ $tour->slug }}" aria-label="Compartir {{ $tour->title }}"><i class="fas fa-share-alt"></i></button>
+                                    </div>
+                                </div>
+                                <div class="tour-card-content">
+                                    <div class="tour-card-header">
+                                        <span class="tour-category"><i class="fas fa-tag"></i> {{ $resolvedCategoryName ?: 'Sin categoría' }}</span>
+                                        <div class="tour-rating" aria-label="Calificación promedio {{ number_format($rating, 1) }}">
+                                            <div class="stars">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $fullStars)
+                                                        <i class="fas fa-star"></i>
+                                                    @elseif($i === $fullStars + 1 && $hasHalfStar)
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    @else
+                                                        <i class="far fa-star"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <span class="rating-score">{{ number_format($rating, 1) }}</span>
+                                            <span class="rating-count">({{ rand(18, 95) }} reseñas)</span>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="tour-title">
+                                        <a href="{{ route('tours.show', $tour->slug) }}">{{ $tour->title }}</a>
+                                    </h3>
+
+                                    <p class="tour-description">{{ Str::limit($tour->description, 140) }}</p>
+
+                                    <ul class="tour-attributes" aria-label="Detalles del tour">
+                                        <li>
+                                            <i class="fas fa-clock" aria-hidden="true"></i>
+                                            <span>{{ $tour->duration_days }} día{{ $tour->duration_days !== 1 ? 's' : '' }} • {{ $tour->duration_hours }} hora{{ $tour->duration_hours !== 1 ? 's' : '' }}</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-users" aria-hidden="true"></i>
+                                            <span>{{ $tour->min_participants }}-{{ $tour->max_participants }} personas</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-building" aria-hidden="true"></i>
+                                            <span>{{ $resolvedCompanyName ?: 'Operador certificado' }}</span>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tour-card-footer">
+                                        <div class="tour-price">
+                                            <span class="price-label">Desde</span>
+                                            <span class="price-value">S/ {{ number_format($tour->price, 0) }}</span>
+                                            <span class="price-note">por persona</span>
+                                        </div>
+                                        <div class="tour-actions-group">
+                                            <button class="btn-heart" data-tour-id="{{ $tour->id }}" aria-label="Añadir tour a favoritos"><i class="far fa-heart"></i></button>
+                                            <a href="{{ route('tours.show', $tour->slug) }}" class="btn btn-outline">Ver detalles</a>
+                                            <a href="{{ route('tours.show', $tour->slug) }}" class="btn btn-primary">Reservar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+
+                    <nav class="pagination-wrapper" aria-label="Paginación">{{ $tours->appends(request()->query())->links() }}</nav>
+                @else
+                    <div class="no-results" role="status">
+                        <div class="no-results-icon"><i class="fas fa-search"></i></div>
+                        <h3>No encontramos resultados</h3>
+                        <p>
+                            @if($activeFilters->isNotEmpty())
+                                Ajusta los filtros o explora otras categorías para encontrar más experiencias.
+                            @else
+                                Aún no tenemos tours disponibles. Vuelve pronto para descubrir nuevas aventuras.
                             @endif
                         </p>
                         <div class="no-results-actions">
-                            <a href="{{ route('tours.index') }}" class="btn btn-primary">
-                                <i class="fas fa-refresh" aria-hidden="true"></i>
-                                <span>Ver Todos los Tours</span>
-                            </a>
-                            @if(request()->hasAny(['search', 'category', 'price_min', 'price_max', 'duration', 'difficulty']))
-                                <button type="button" class="btn btn-ghost" onclick="history.back();">
-                                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
-                                    <span>Volver</span>
-                                </button>
+                            <a href="{{ route('tours.index') }}" class="btn btn-primary"><i class="fas fa-compass"></i> Explorar todos los tours</a>
+                            @if($activeFilters->isNotEmpty())
+                                <button type="button" class="btn btn-ghost" onclick="history.back()"><i class="fas fa-arrow-left"></i> Regresar</button>
                             @endif
                         </div>
                     </div>
-                </div>
-            @endif
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="categories-section" id="categorias" role="region" aria-label="Categorías de tours">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Explora por Categorías</h2>
-                <p class="section-subtitle">Encuentra tu aventura perfecta según tus intereses</p>
+                @endif
             </div>
-            
-            <div class="categories-grid" role="list">
-                @foreach($categories as $category)
-                    <a href="{{ route('tours.index', ['category' => $category->slug]) }}" 
-                       class="category-card" 
-                       role="listitem"
-                       aria-label="Ver tours de {{ $category->name }}">
-                        <div class="category-image">
-                            <div class="category-icon" style="color: {{ $category->color ?? '#10b981' }}">
+        </section>
+
+        <section class="categories-section" id="categorias" aria-label="Categorías disponibles">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Explora por categoría</h2>
+                        <p class="section-subtitle">Selecciona experiencias según tu estilo de viaje</p>
+                    </div>
+                    <a href="{{ route('tours.index') }}" class="link-all">Ver todos los tours <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="categories-grid" role="list">
+                    @foreach($categories as $category)
+                        <a href="{{ route('tours.index', ['category' => $category->slug]) }}" class="category-card" role="listitem" aria-label="Ver tours de {{ $category->name }}">
+                            <div class="category-icon" style="background: {{ $category->color ?? 'var(--color-primary)' }}10; color: {{ $category->color ?? 'var(--color-primary)' }}">
                                 <i class="fas fa-{{ $category->icon ?? 'mountain' }}" aria-hidden="true"></i>
                             </div>
-                            <div class="category-overlay"></div>
-                        </div>
-                        
-                        <div class="category-content">
-                            <h3 class="category-title">{{ $category->name }}</h3>
-                            <p class="category-description">{{ $category->description ?? 'Descubre increíbles experiencias.' }}</p>
-                            
-                            <div class="category-meta">
-                                <span class="category-count">
-                                    <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
-                                    {{ $category->tours_count ?? 0 }} tour{{ ($category->tours_count ?? 0) !== 1 ? 's' : '' }}
-                                </span>
-                                <span class="category-arrow">
-                                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                                </span>
+                            <div class="category-info">
+                                <h3>{{ $category->name }}</h3>
+                                <p>{{ $category->description ?? 'Descubre experiencias inolvidables en esta categoría.' }}</p>
+                                <span class="category-meta"><i class="fas fa-map-marker-alt"></i> {{ $category->tours_count ?? 0 }} tour{{ ($category->tours_count ?? 0) === 1 ? '' : 's' }}</span>
                             </div>
-                        </div>
-                    </a>
-                @endforeach
+                            <span class="category-arrow"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+        <section class="cta-section" id="planifica">
+            <div class="container cta-inner">
+                <div class="cta-content">
+                    <h2>¿Listo para planificar tu itinerario completo?</h2>
+                    <p>Conecta con operadores locales verificados, recibe propuestas personalizadas y asegúrate de vivir una experiencia inolvidable en la selva central.</p>
+                    <div class="cta-actions">
+                        <a href="{{ route('register') }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Crear cuenta</a>
+                        <a href="#contacto" class="btn btn-outline"><i class="fas fa-comments"></i> Consultar con un experto</a>
+                    </div>
+                </div>
+                <div class="cta-highlights">
+                    <div class="highlight-item">
+                        <i class="fas fa-hands-helping"></i>
+                        <div>
+                            <h4>Acompañamiento experto</h4>
+                            <p>Te guiamos en cada paso para asegurar la mejor elección.</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-leaf"></i>
+                        <div>
+                            <h4>Impacto positivo</h4>
+                            <p>Apoyamos iniciativas de turismo sostenible en la región.</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h4>Pagos seguros</h4>
+                            <p>Procesos protegidos y transparencia total en los precios.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contacto">
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-top">
                 <div class="footer-brand">
                     <h3>Chanchamayo Tours</h3>
-                    <p>Descubre la magia de Chanchamayo con nosotros</p>
+                    <p>Descubre la magia de la selva central con experiencias curadas por expertos locales.</p>
+                    <div class="footer-contact">
+                        <a href="mailto:hola@chanchamayotours.com"><i class="fas fa-envelope"></i> hola@chanchamayotours.com</a>
+                        <a href="tel:+51987654321"><i class="fas fa-phone"></i> +51 987 654 321</a>
+                    </div>
                 </div>
                 <div class="footer-links">
                     <div class="footer-column">
-                        <h4>Tours</h4>
-                        <ul>
-                            <li><a href="{{ route('tours.index') }}">Todos los Tours</a></li>
-                            <li><a href="{{ route('tours.index', ['category' => 'aventura']) }}">Aventura</a></li>
-                            <li><a href="{{ route('tours.index', ['category' => 'ecoturismo']) }}">Ecoturismo</a></li>
-                            <li><a href="{{ route('tours.index', ['category' => 'gastronomico']) }}">Gastronómico</a></li>
-                        </ul>
+                        <h4>Descubre</h4>
+                        <a href="{{ route('tours.index') }}">Todos los tours</a>
+                        <a href="#categorias">Categorías</a>
+                        <a href="#planifica">Planifica tu viaje</a>
                     </div>
                     <div class="footer-column">
-                        <h4>Empresa</h4>
-                        <ul>
-                            <li><a href="#nosotros">Nosotros</a></li>
-                            <li><a href="{{ route('company.register') }}">Registrar Empresa</a></li>
-                            <li><a href="#contacto">Contacto</a></li>
-                        </ul>
+                        <h4>Empresas</h4>
+                        <a href="{{ route('company.register') }}">Registrar empresa</a>
+                        <a href="{{ route('login') }}">Iniciar sesión</a>
+                        <a href="#">Guía de buenas prácticas</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Términos y condiciones</a>
+                        <a href="#">Política de privacidad</a>
+                        <a href="#">Preguntas frecuentes</a>
                     </div>
                 </div>
-                
-                <div class="social-links">
+                <div class="footer-social">
                     <h4>Síguenos</h4>
                     <div class="social-icons">
-                        <a href="#" class="social-icon" aria-label="Facebook de Chanchamayo Tours">
-                            <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="Instagram de Chanchamayo Tours">
-                            <i class="fab fa-instagram" aria-hidden="true"></i>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="WhatsApp de Chanchamayo Tours">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                        </a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Chanchamayo Tours. Todos los derechos reservados.</p>
+                <p>&copy; {{ now()->year }} Chanchamayo Tours. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
+    <div class="toast-container" id="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Price slider functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+            const header = document.getElementById('site-header');
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.getElementById('main-navigation');
+            const searchInput = document.getElementById('search-input');
+            const searchHints = document.getElementById('search-hints');
+            const filtersForm = document.getElementById('filters-form');
+            const filterToggle = document.querySelector('.filter-toggle');
             const priceSlider = document.getElementById('priceSlider');
             const priceValue = document.getElementById('priceValue');
             const priceMaxInput = document.getElementById('priceMaxInput');
-            
-            if (priceSlider && priceValue && priceMaxInput) {
-                priceSlider.addEventListener('input', function() {
-                    const value = this.value;
-                    priceValue.textContent = value >= 500 ? 'S/ 500+' : `S/ ${value}`;
-                    priceMaxInput.value = value >= 500 ? '' : value;
-                    
-                    // Update slider background
-                    const percentage = (value / this.max) * 100;
-                    this.style.background = `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+            const sortSelect = document.getElementById('sort-select');
+
+            if (mobileMenuToggle && navMenu) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                    mobileMenuToggle.setAttribute('aria-expanded', String(!isExpanded));
+                    navMenu.classList.toggle('active');
+                    body.classList.toggle('menu-open');
                 });
-                
-                // Initialize slider background
-                const initialPercentage = (priceSlider.value / priceSlider.max) * 100;
-                priceSlider.style.background = `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${initialPercentage}%, #e5e7eb ${initialPercentage}%, #e5e7eb 100%)`;
             }
 
-            // Mobile menu toggle mejorado
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const navMenu = document.getElementById('main-navigation');
-            
-            if (mobileMenuToggle && navMenu) {
-                mobileMenuToggle.addEventListener('click', function() {
-                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', !isExpanded);
-                    navMenu.classList.toggle('active');
-                    document.body.classList.toggle('menu-open');
-                });
-                
-                // Cerrar menú al hacer click en un enlace
-                navMenu.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        navMenu.classList.remove('active');
-                        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.classList.remove('menu-open');
-                    });
-                });
-                
-                // Cerrar menú al hacer click fuera
-                document.addEventListener('click', (e) => {
-                    if (!mobileMenuToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                        navMenu.classList.remove('active');
-                        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.classList.remove('menu-open');
-                    }
-                });
-            }
-            
-            // Header scroll effect
-            let lastScrollTop = 0;
-            const header = document.querySelector('.header-sticky');
-            
-            window.addEventListener('scroll', function() {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (scrollTop > 100) {
-                    header.classList.add('header-scrolled');
-                } else {
-                    header.classList.remove('header-scrolled');
+            document.addEventListener('click', (event) => {
+                if (mobileMenuToggle && !mobileMenuToggle.contains(event.target) && navMenu && !navMenu.contains(event.target)) {
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.remove('active');
+                    body.classList.remove('menu-open');
                 }
-                
+            });
+
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function () {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > 120) {
+                    header.classList.add('header-condensed');
+                } else {
+                    header.classList.remove('header-condensed');
+                }
                 lastScrollTop = scrollTop;
             }, { passive: true });
 
-            // Mobile filters toggle
-            const filterToggle = document.querySelector('.filter-toggle');
-            const filtersForm = document.getElementById('filters-form');
-            
             if (filterToggle && filtersForm) {
-                filterToggle.addEventListener('click', function() {
-                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', !isExpanded);
-                    filtersForm.classList.toggle('active');
+                filterToggle.addEventListener('click', () => {
+                    const isExpanded = filterToggle.getAttribute('aria-expanded') === 'true';
+                    filterToggle.setAttribute('aria-expanded', String(!isExpanded));
+                    filtersForm.classList.toggle('visible');
                 });
             }
 
-            // Update active filters count
-            function updateActiveFiltersCount() {
-                const activeFilters = document.querySelectorAll('.filter-chip').length;
-                const countElement = document.getElementById('active-filters-count');
-                if (countElement) {
-                    countElement.textContent = activeFilters > 0 ? activeFilters : '';
-                    countElement.style.display = activeFilters > 0 ? 'inline' : 'none';
-                }
-            }
-            updateActiveFiltersCount();
+            if (priceSlider && priceValue && priceMaxInput) {
+                const updateSlider = (value) => {
+                    const parsed = Number(value);
+                    const capped = parsed >= 500 ? '500+' : parsed;
+                    priceValue.textContent = `S/ ${capped}`;
+                    priceMaxInput.value = parsed >= 500 ? '' : parsed;
+                    const percentage = Math.min((parsed / 500) * 100, 100);
+                    priceSlider.style.setProperty('--slider-fill', `${percentage}%`);
+                };
 
-            // Enhanced search input functionality
-            const searchInput = document.getElementById('search-input');
-            const searchHints = document.getElementById('search-hints');
-            const searchForm = document.querySelector('.search-form');
-            
+                const initialValue = priceSlider.value ? Number(priceSlider.value) : 250;
+                priceSlider.value = initialValue;
+                updateSlider(initialValue);
+
+                priceSlider.addEventListener('input', (event) => updateSlider(event.target.value));
+            }
+
             if (searchInput && searchHints) {
-                searchInput.addEventListener('focus', () => {
-                    searchHints.style.display = 'block';
-                    searchForm.classList.add('focused');
-                });
-                
-                searchInput.addEventListener('blur', () => {
-                    setTimeout(() => {
-                        searchHints.style.display = 'none';
-                        searchForm.classList.remove('focused');
-                    }, 200);
-                });
-                
-                // Search hints interaction
-                const hintItems = searchHints.querySelectorAll('.search-hint');
-                hintItems.forEach(hint => {
+                searchInput.addEventListener('focus', () => searchHints.classList.add('visible'));
+                searchInput.addEventListener('blur', () => setTimeout(() => searchHints.classList.remove('visible'), 150));
+                searchHints.querySelectorAll('.search-hint').forEach((hint) => {
+                    hint.addEventListener('mousedown', (event) => event.preventDefault());
                     hint.addEventListener('click', () => {
-                        searchInput.value = hint.textContent;
-                        searchHints.style.display = 'none';
+                        searchInput.value = hint.textContent.trim();
                         searchInput.focus();
                     });
                 });
             }
-            
-            // Enhanced hover effects for cards
-            const tourCards = document.querySelectorAll('.tour-card');
-            tourCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.zIndex = '10';
+
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    const url = new URL(window.location.href);
+                    const selected = sortSelect.value;
+                    url.searchParams.set('sort', selected);
+                    window.location.href = url.toString();
                 });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.zIndex = 'auto';
+            }
+
+            const favoriteButtons = document.querySelectorAll('.favorite-btn, .btn-heart');
+            favoriteButtons.forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    toggleFavorite(button);
                 });
             });
 
-            // Favorites functionality with animation
-            document.querySelectorAll('.favorite-btn, .btn-heart').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const icon = this.querySelector('i');
-                    const isActive = icon.classList.contains('fas');
-                    
-                    // Add animation class
-                    this.classList.add('animate-heart');
-                    
-                    if (!isActive) {
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        this.classList.add('active');
-                        
-                        // Show feedback
-                        showToast('Agregado a favoritos', 'success');
-                    } else {
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        this.classList.remove('active');
-                        
-                        // Show feedback
-                        showToast('Eliminado de favoritos', 'info');
-                    }
-                    
-                    // Remove animation class
-                    setTimeout(() => {
-                        this.classList.remove('animate-heart');
-                    }, 300);
-                });
-            });
+            document.querySelectorAll('.share-btn').forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const tourSlug = button.dataset.tourSlug;
+                    const card = button.closest('.tour-card');
+                    const title = card ? card.querySelector('.tour-title a').textContent.trim() : 'Tour';
+                    const shareUrl = `${window.location.origin}/tours/${tourSlug}`;
 
-            // Share functionality
-            document.querySelectorAll('.share-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const tourId = this.dataset.tourId;
-                    const tourTitle = this.closest('.tour-card').querySelector('.tour-title a, .tour-link').textContent;
-                    
                     if (navigator.share) {
-                        navigator.share({
-                            title: tourTitle,
-                            url: window.location.origin + '/tours/' + tourId
-                        });
-                    } else {
-                        // Fallback: copy to clipboard
-                        const url = window.location.origin + '/tours/' + tourId;
-                        navigator.clipboard.writeText(url).then(() => {
-                            showToast('Enlace copiado al portapapeles', 'success');
-                        });
+                        navigator.share({ title, url: shareUrl }).catch(() => showToast('No se pudo compartir', 'error'));
+                    } else if (navigator.clipboard) {
+                        navigator.clipboard.writeText(shareUrl).then(() => showToast('Enlace copiado al portapapeles')).catch(() => showToast('No se pudo copiar el enlace', 'error'));
                     }
                 });
             });
-
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // Toast notification system
-            function showToast(message, type = 'info') {
-                const toast = document.createElement('div');
-                toast.className = `toast toast-${type}`;
-                toast.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check' : 'info-circle'}" aria-hidden="true"></i>
-                    <span>${message}</span>
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // Show toast
-                setTimeout(() => toast.classList.add('show'), 100);
-                
-                // Hide and remove toast
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => document.body.removeChild(toast), 300);
-                }, 3000);
-            }
-
-            // Lazy loading for images
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const img = entry.target;
-                            img.src = img.dataset.src;
-                            img.classList.remove('lazy');
-                            observer.unobserve(img);
-                        }
-                    });
-                });
-
-                document.querySelectorAll('img[data-src]').forEach(img => {
-                    imageObserver.observe(img);
-                });
-            }
-
-            // Scroll-based header behavior
-            let lastScrollTop = 0;
-            const header = document.querySelector('.header');
-            
-            window.addEventListener('scroll', function() {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
-                if (scrollTop > lastScrollTop && scrollTop > 100) {
-                    // Scrolling down
-                    header.classList.add('header-hidden');
-                } else {
-                    // Scrolling up
-                    header.classList.remove('header-hidden');
-                }
-                
-                lastScrollTop = scrollTop;
-            }, { passive: true });
         });
+
+        function clearSearch() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('search');
+            window.location.href = url.toString();
+        }
+
+        function handleImageError(image) {
+            const container = image.parentElement;
+            image.remove();
+            const placeholder = document.createElement('div');
+            placeholder.className = 'tour-image-placeholder';
+            placeholder.innerHTML = '<i class="fas fa-image"></i><span>Imagen no disponible</span>';
+            container.prepend(placeholder);
+        }
+
+        function toggleFavorite(button) {
+            const icon = button.querySelector('i');
+            const isActive = icon.classList.contains('fas');
+            button.classList.add('animate-heart');
+
+            if (isActive) {
+                icon.classList.replace('fas', 'far');
+                button.classList.remove('active');
+                showToast('Tour eliminado de favoritos', 'info');
+            } else {
+                icon.classList.replace('far', 'fas');
+                button.classList.add('active');
+                showToast('Tour agregado a favoritos', 'success');
+            }
+
+            setTimeout(() => button.classList.remove('animate-heart'), 300);
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) {
+                return;
+            }
+            const iconMap = { success: 'fa-check', info: 'fa-info-circle', error: 'fa-exclamation-circle' };
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<i class="fas ${iconMap[type] || iconMap.info}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
     </script>
 </body>
 </html>

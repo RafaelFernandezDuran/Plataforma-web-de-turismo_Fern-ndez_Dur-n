@@ -56,6 +56,11 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     // Estados de reserva
     const STATUS_PENDING = 'pending';
     const STATUS_CONFIRMED = 'confirmed';

@@ -4,28 +4,27 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\AccommodationController;
+use App\Http\Controllers\CompanyRegistrationController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Accommodation;
 
 Route::get('/', function () {
-    return view('welcome');
+    $featuredAccommodations = Accommodation::active()
+        ->orderByDesc('rating')
+        ->take(3)
+        ->get();
+
+    return view('welcome', [
+        'featuredAccommodations' => $featuredAccommodations,
+    ]);
 });
 
-Route::get('/dashboard', function () {
-    $user = Auth::user();
-    
-    switch ($user->user_type) {
-        case 'company_admin':
-            return redirect()->route('company.dashboard');
-        case 'tourist':
-            return view('dashboard.tourist');
-        case 'admin':
-            return redirect()->route('admin.dashboard');
-        default:
-            return view('dashboard');
-    }
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -74,16 +73,15 @@ Route::get('/test-db', function () {
 // Rutas públicas
 Route::get('/tours', [TourController::class, 'index'])->name('tours.index');
 Route::get('/tours/{tour}', [TourController::class, 'show'])->name('tours.show');
+Route::get('/alojamientos', [AccommodationController::class, 'index'])->name('accommodations.index');
+Route::get('/alojamientos/{accommodation:slug}', [AccommodationController::class, 'show'])->name('accommodations.show');
+Route::post('/alojamientos/{accommodation:slug}/solicitud', [AccommodationController::class, 'submitRequest'])->name('accommodations.request');
 
 // Rutas de registro de empresas
-use App\Http\Controllers\CompanyRegistrationController;
-
 Route::get('/company/register', [CompanyRegistrationController::class, 'showRegistrationForm'])->name('company.register');
 Route::post('/company/register', [CompanyRegistrationController::class, 'register'])->name('company.register.submit');
 Route::get('/company/register/step/{step}', [CompanyRegistrationController::class, 'getStepData'])->name('company.register.step');
 Route::post('/company/register/check-availability', [CompanyRegistrationController::class, 'checkAvailability'])->name('company.register.availability');
-Route::get('/company/register/services', [CompanyRegistrationController::class, 'getServices'])->name('company.register.services');
-Route::get('/company/register/languages', [CompanyRegistrationController::class, 'getLanguages'])->name('company.register.languages');
 
 // Rutas para empresas turísticas
 Route::middleware(['auth', 'user.type:company_admin'])->prefix('company')->name('company.')->group(function () {

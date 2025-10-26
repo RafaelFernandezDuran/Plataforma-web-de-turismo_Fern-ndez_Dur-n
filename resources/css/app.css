@@ -1,3 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.dashboard-page {
+		min-height: 100vh;
+		background: linear-gradient(140deg, rgba(226, 232, 240, 0.6) 0%, rgba(255, 255, 255, 1) 45%, rgba(226, 232, 240, 0.6) 100%);
+	}
+
+	.dashboard-header {
+		background-color: rgba(255, 255, 255, 0.82);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		padding: 1.25rem 1.5rem;
+		border-radius: 1.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.65);
+		box-shadow: 0 22px 44px -28px rgba(15, 23, 42, 0.28);
+	}
+
+	.dashboard-stat-card {
+		position: relative;
+		overflow: hidden;
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+		background-color: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	.dashboard-stat-card::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(120deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0));
+		opacity: 0;
+		transition: opacity 0.25s ease;
+	}
+
+	.dashboard-stat-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 20px 40px -26px rgba(15, 23, 42, 0.4);
+	}
+
+	.dashboard-stat-card:hover::after {
+		opacity: 1;
+	}
+
+	.dashboard-card {
+		background-color: rgba(255, 255, 255, 0.9);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+		border-radius: 1.5rem;
+		border: 1px solid rgba(248, 250, 252, 0.85);
+		box-shadow: 0 18px 38px -28px rgba(15, 23, 42, 0.35);
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+	}
+
+	.dashboard-card:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 26px 46px -30px rgba(15, 23, 42, 0.4);
+	}
+
+	.dashboard-highlight-card {
+		background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(255, 255, 255, 0.9));
+		border: 1px solid rgba(191, 219, 254, 0.8);
+		box-shadow: 0 24px 48px -30px rgba(59, 130, 246, 0.4);
+	}
+
+	.dashboard-tip-card {
+		background-color: rgba(219, 234, 254, 0.85);
+		border: 1px solid rgba(191, 219, 254, 0.9);
+		box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.08);
+	}
+
+	.dashboard-status-badge {
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+	}
+
+	.dashboard-empty-state {
+		background-color: rgba(255, 255, 255, 0.82);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+	}
+
+	.dashboard-chart {
+		position: relative;
+	}
+
+	.dashboard-chart::after {
+		content: "";
+		position: absolute;
+		inset: -24px;
+		z-index: -1;
+		background: radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 60%);
+	}
+
+	.dashboard-tour-card {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.dashboard-tour-card:hover {
+		transform: translateY(-6px);
+		box-shadow: 0 32px 60px -32px rgba(15, 23, 42, 0.48);
+	}
+
+	.dashboard-mini-card {
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+	}
+
+	.dashboard-mini-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 22px 42px -32px rgba(15, 23, 42, 0.4);
+	}
+}

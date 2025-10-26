@@ -40,6 +40,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="/">Inicio</a></li>
                 <li><a href="/tours">Tours</a></li>
+                <li><a href="{{ route('accommodations.index') }}">Alojamientos</a></li>
                 <li><a href="#categorias">Categorías</a></li>
                 <li><a href="{{ route('company.register') }}">Registrar Empresa</a></li>
                 <li><a href="#contacto">Contacto</a></li>
@@ -94,6 +95,10 @@
                 <a href="/tours" class="btn-hero primary" aria-label="Explorar todos los tours disponibles">
                     <i class="fas fa-compass" aria-hidden="true"></i>
                     Explorar Tours
+                </a>
+                <a href="{{ route('accommodations.index') }}" class="btn-hero primary outline" aria-label="Ver alojamientos disponibles">
+                    <i class="fas fa-bed" aria-hidden="true"></i>
+                    Ver Alojamientos
                 </a>
                 <a href="#video-tour" class="btn-hero ghost" aria-label="Ver video promocional">
                     <i class="fas fa-play" aria-hidden="true"></i>
@@ -389,6 +394,93 @@
             </div>
         </div>
     </section>
+
+    @php
+        $accommodations = ($featuredAccommodations ?? collect());
+    @endphp
+
+    @if($accommodations->isNotEmpty())
+        <section class="section" id="alojamientos" style="background: white;">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 3.5rem;" data-aos="fade-up">
+                    <p class="eyebrow">Hospédate en la Selva</p>
+                    <h2 class="title">Alojamientos Destacados</h2>
+                    <p class="muted" style="max-width: 620px; margin: 0 auto;">
+                        Descansa en ecolodges, hoteles boutique y casas rurales seleccionadas con las mejores reseñas.
+                    </p>
+                </div>
+
+                <div class="accommodations-grid">
+                    @foreach($accommodations as $accommodation)
+                        @php
+                            $imagePath = $accommodation->main_image
+                                ? asset('storage/' . ltrim($accommodation->main_image, '/'))
+                                : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop';
+                        @endphp
+
+                        <article class="accommodation-card" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
+                            <div class="accommodation-image">
+                                <img 
+                                    src="{{ $imagePath }}" 
+                                    alt="Foto del alojamiento {{ $accommodation->name }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                                <div class="accommodation-rating">
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    <span>{{ number_format($accommodation->rating ?? 0, 1) }}</span>
+                                    <small>({{ $accommodation->total_reviews ?? 0 }})</small>
+                                </div>
+                            </div>
+
+                            <div class="accommodation-content">
+                                <h3 class="accommodation-title">{{ $accommodation->name }}</h3>
+                                <p class="accommodation-location">
+                                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                    {{ $accommodation->city }}, {{ $accommodation->region }}
+                                </p>
+                                <p class="accommodation-description">
+                                    {{ \Illuminate\Support\Str::limit($accommodation->description, 120) }}
+                                </p>
+
+                                <div class="accommodation-meta">
+                                    <span class="accommodation-price">
+                                        <span class="metric">S/ {{ number_format($accommodation->price_per_night, 2) }}</span>
+                                        <small>por noche</small>
+                                    </span>
+                                    <a href="{{ route('accommodations.show', $accommodation) }}" class="btn-book" aria-label="Ver detalles del alojamiento {{ $accommodation->name }}">
+                                        Ver Detalles
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+
+                <div class="text-center" style="margin-top: 3rem;">
+                    <a href="{{ route('accommodations.index') }}" class="btn-cta" data-aos="fade-up" data-aos-delay="400">
+                        <i class="fas fa-bed" aria-hidden="true"></i>
+                        Ver todos los alojamientos
+                    </a>
+                </div>
+            </div>
+        </section>
+    @else
+        <section class="section" id="alojamientos">
+            <div class="container">
+                <div class="empty-state" data-aos="fade-up">
+                    <p class="eyebrow">Hospédate en la Selva</p>
+                    <h2 class="title">Muy pronto, alojamientos disponibles</h2>
+                    <p class="muted" style="max-width: 620px; margin: 0 auto;">
+                        Estamos trabajando con empresas locales para mostrarte opciones únicas donde descansar y conectarte con la naturaleza.
+                    </p>
+                    <a href="{{ route('accommodations.index') }}" class="btn-cta" style="margin-top: 2rem;">
+                        Conoce más sobre nuestros alojamientos
+                    </a>
+                </div>
+            </div>
+        </section>
+    @endif
 
     <!-- Fila de Logros (Gamificación) -->
     <section class="section cta-section">

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             TourSeeder::class,
             TourImagesSeeder::class,
+            AccommodationSeeder::class,
         ]);
     }
 }

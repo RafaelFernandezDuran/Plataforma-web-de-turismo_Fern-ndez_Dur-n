@@ -33,24 +33,6 @@
             <x-input-error :messages="$errors->get('user_type')" class="mt-2" />
         </div>
 
-        <!-- Document Type and Number -->
-        <div class="mt-4 grid grid-cols-2 gap-4">
-            <div>
-                <x-input-label for="document_type" :value="__('Tipo de Documento')" />
-                <select id="document_type" name="document_type" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                    <option value="DNI" {{ old('document_type') == 'DNI' ? 'selected' : '' }}>DNI</option>
-                    <option value="Passport" {{ old('document_type') == 'Passport' ? 'selected' : '' }}>Pasaporte</option>
-                    <option value="CE" {{ old('document_type') == 'CE' ? 'selected' : '' }}>Carné de Extranjería</option>
-                </select>
-                <x-input-error :messages="$errors->get('document_type')" class="mt-2" />
-            </div>
-            <div>
-                <x-input-label for="document_number" :value="__('Número de Documento')" />
-                <x-text-input id="document_number" class="block mt-1 w-full" type="text" name="document_number" :value="old('document_number')" />
-                <x-input-error :messages="$errors->get('document_number')" class="mt-2" />
-            </div>
-        </div>
-
         <!-- Nationality -->
         <div class="mt-4">
             <x-input-label for="nationality" :value="__('Nacionalidad')" />

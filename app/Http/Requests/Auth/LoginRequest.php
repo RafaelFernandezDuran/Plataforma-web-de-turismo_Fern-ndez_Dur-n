@@ -27,9 +27,27 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string', 'lowercase', 'email'],
             'password' => ['required', 'string'],
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'Ingresa un correo electrónico válido.',
+            'password.required' => 'La contraseña es obligatoria.',
+        ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('email')) {
+            $this->merge([
+                'email' => strtolower($this->input('email')),
+            ]);
+        }
     }
 
     /**

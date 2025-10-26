@@ -23,32 +23,31 @@ class TourSeeder extends Seeder
                 'name' => 'Chanchamayo Adventures',
                 'password' => bcrypt('password'),
                 'user_type' => 'company_admin',
-                'email_verified_at' => now(),
             ]
         );
+
+        if (is_null($user->email_verified_at)) {
+            $user->forceFill(['email_verified_at' => now()])->save();
+        }
 
         $company = Company::firstOrCreate(
             ['user_id' => $user->id],
             [
                 'name' => 'Chanchamayo Adventures',
                 'slug' => 'chanchamayo-adventures',
-                'legal_name' => 'Chanchamayo Adventures S.A.C.',
-                'ruc' => '20123456789',
-                'registration_number' => 'REG-2024-001',
+                'ruc' => '20876543210',
                 'description' => 'Empresa líder en turismo de aventura y ecoturismo en Chanchamayo',
                 'status' => 'active',
                 'phone' => '+51 999 888 777',
                 'email' => 'info@chanchamayoadventures.com',
-                'website' => 'https://chanchamayoadventures.com',
                 'address' => 'Jr. Amazonas 123, La Merced, Chanchamayo',
                 'city' => 'La Merced',
                 'region' => 'Junín',
-                'postal_code' => '12345',
+                'contact_person' => 'Equipo Chanchamayo Adventures',
                 'registration_status' => 'approved',
                 'terms_accepted' => true,
                 'terms_accepted_at' => now(),
                 'submitted_at' => now(),
-                'reviewed_at' => now(),
             ]
         );
 
@@ -86,8 +85,12 @@ class TourSeeder extends Seeder
                     'Gastos personales'
                 ],
                 'itinerary' => 'Recojo a las 7:00 AM - Caminata a la catarata - Almuerzo típico - Aguas termales - Retorno 4:00 PM',
-                'gallery' => [],
-                'main_image' => 'tours/sample-tour1.jpg',
+                'gallery' => [
+                    'https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1507499739999-097706ad8914?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?auto=format&fit=crop&w=1200&q=80',
+                ],
+                'main_image' => 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80',
 
                 'status' => 'active',
                 'is_featured' => true,
@@ -127,8 +130,12 @@ class TourSeeder extends Seeder
                     'Propinas'
                 ],
                 'itinerary' => 'Bienvenida 8:00 AM - Visita plantación - Proceso del café - Almuerzo campestre - Cata de café',
-                'gallery' => [],
-                'main_image' => 'tours/sample-tour2.jpg',
+                'gallery' => [
+                    'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80',
+                ],
+                'main_image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80',
                 'status' => 'active',
                 'is_featured' => false,
                 'tags' => ['café', 'gastronomía', 'cultura', 'plantación', 'degustación'],
@@ -161,8 +168,12 @@ class TourSeeder extends Seeder
                     'Cámara deportiva',
                     'Bebidas energéticas adicionales'
                 ],
-                'gallery' => [],
-                'main_image' => 'tours/sample-tour3.jpg',
+                'gallery' => [
+                    'https://images.unsplash.com/photo-1523419409543-0c1df022bdd1?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1526481280695-3c46903f1b34?auto=format&fit=crop&w=1200&q=80',
+                    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80',
+                ],
+                'main_image' => 'https://images.unsplash.com/photo-1570126646281-5ec881e1ece4?auto=format&fit=crop&w=1200&q=80',
                 'status' => 'active',
                 'is_featured' => true,
                 'tags' => ['aventura', 'adrenalina', 'puente colgante', 'tirolesa', 'rappel'],
@@ -172,7 +183,10 @@ class TourSeeder extends Seeder
         ];
 
         foreach ($tours as $tourData) {
-            Tour::create($tourData);
+            Tour::updateOrCreate(
+                ['slug' => $tourData['slug']],
+                $tourData
+            );
         }
     }
 }

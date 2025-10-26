@@ -271,7 +271,15 @@
         }
 
         .checkbox-item input {
-            display: none;
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+            accent-color: var(--verde-selva);
+        }
+
+        .checkbox-item input:checked + span {
+            color: var(--verde-selva);
+            font-weight: 600;
         }
 
         .error-message {
@@ -479,7 +487,7 @@
 
             <!-- Progress Bar -->
             <div class="progress-bar">
-                <div class="progress-fill" id="progressBar" style="width: 20%;"></div>
+                <div class="progress-fill" id="progressBar" style="width: 33.33%;"></div>
             </div>
 
             <!-- Step Indicator -->
@@ -494,14 +502,6 @@
                 <div class="step-connector"></div>
                 <div class="step" data-step="3">
                     <div class="step-number">3</div>
-                </div>
-                <div class="step-connector"></div>
-                <div class="step" data-step="4">
-                    <div class="step-number">4</div>
-                </div>
-                <div class="step-connector"></div>
-                <div class="step" data-step="5">
-                    <div class="step-number">5</div>
                 </div>
             </div>
 
@@ -518,15 +518,9 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label required">Nombre Comercial</label>
-                            <input type="text" name="name" class="form-input" placeholder="Ej: Aventuras Chanchamayo SAC" required>
+                            <input type="text" name="name" class="form-input" placeholder="Ej: Aventuras Chanchamayo" required>
                             <div class="availability-check" id="nameCheck"></div>
                             <div class="error-message" id="nameError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Razón Social</label>
-                            <input type="text" name="legal_name" class="form-input" placeholder="Razón social completa" required>
-                            <div class="error-message" id="legal_nameError"></div>
                         </div>
 
                         <div class="form-group">
@@ -548,31 +542,19 @@
                             <input type="tel" name="phone" class="form-input" placeholder="+51 987 654 321" required>
                             <div class="error-message" id="phoneError"></div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Teléfono de Emergencia</label>
-                            <input type="tel" name="emergency_phone" class="form-input" placeholder="+51 987 654 322">
-                            <div class="error-message" id="emergency_phoneError"></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label">Sitio Web</label>
-                            <input type="url" name="website" class="form-input" placeholder="https://www.empresa.com">
-                            <div class="error-message" id="websiteError"></div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Ubicación y Contacto -->
+                <!-- Step 2: Ubicación y contacto básico -->
                 <div class="step-content" data-step="2">
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--verde-selva); margin-bottom: 1.5rem;">
-                        Ubicación y Información de Contacto
+                        Ubicación y persona de contacto
                     </h3>
                     
                     <div class="form-grid">
                         <div class="form-group full-width">
                             <label class="form-label required">Dirección Completa</label>
-                            <input type="text" name="address" class="form-input" placeholder="Av. Principal 123, Urb. Los Jardines" required>
+                            <input type="text" name="address" class="form-input" placeholder="Av. Principal 123, La Merced" required>
                             <div class="error-message" id="addressError"></div>
                         </div>
 
@@ -598,197 +580,23 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Código Postal</label>
-                            <input type="text" name="postal_code" class="form-input" placeholder="12345">
-                            <div class="error-message" id="postal_codeError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Latitud</label>
-                            <input type="number" name="latitude" class="form-input" placeholder="-11.0525" step="any" min="-90" max="90">
-                            <div class="error-message" id="latitudeError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Longitud</label>
-                            <input type="number" name="longitude" class="form-input" placeholder="-75.2092" step="any" min="-180" max="180">
-                            <div class="error-message" id="longitudeError"></div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label required">Persona de Contacto</label>
-                            <input type="text" name="contact_person" class="form-input" placeholder="Juan Pérez García" required>
+                            <input type="text" name="contact_person" class="form-input" placeholder="Nombre y apellidos" required>
                             <div class="error-message" id="contact_personError"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label required">Cargo</label>
-                            <input type="text" name="contact_position" class="form-input" placeholder="Gerente General" required>
-                            <div class="error-message" id="contact_positionError"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 3: Información Comercial -->
-                <div class="step-content" data-step="3">
-                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--verde-selva); margin-bottom: 1.5rem;">
-                        Información Comercial
-                    </h3>
-                    
-                    <div class="form-grid">
                         <div class="form-group full-width">
-                            <label class="form-label required">Descripción de la Empresa</label>
-                            <textarea name="description" class="form-input form-textarea" placeholder="Describe tu empresa, historia, misión y lo que la hace única..." required minlength="100"></textarea>
+                            <label class="form-label required">Descripción breve de la empresa</label>
+                            <textarea name="description" class="form-input form-textarea" placeholder="Cuéntanos en pocas líneas qué ofrece tu empresa" required minlength="40"></textarea>
                             <div class="error-message" id="descriptionError"></div>
                             <div style="font-size: 0.85rem; color: var(--gris-medio); margin-top: 0.5rem;">
-                                Mínimo 100 caracteres
+                                Mínimo 40 caracteres. Podrás ampliar esta información más adelante.
                             </div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label required">Especialidades</label>
-                            <textarea name="specialties" class="form-input" placeholder="Especialidades principales, experiencia, fortalezas..." required></textarea>
-                            <div class="error-message" id="specialtiesError"></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label required">Servicios Ofrecidos</label>
-                            <div class="checkbox-group" id="servicesGroup">
-                                <!-- Se cargarán dinámicamente -->
-                            </div>
-                            <div class="error-message" id="servicesError"></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label required">Idiomas</label>
-                            <div class="checkbox-group" id="languagesGroup">
-                                <!-- Se cargarán dinámicamente -->
-                            </div>
-                            <div class="error-message" id="languagesError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Año de Fundación</label>
-                            <input type="number" name="founded_year" class="form-input" placeholder="2020" min="1900" max="{{ date('Y') }}" required>
-                            <div class="error-message" id="founded_yearError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Número de Empleados</label>
-                            <input type="number" name="employee_count" class="form-input" placeholder="10" min="1" max="1000" required>
-                            <div class="error-message" id="employee_countError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Tamaño Mínimo de Grupo</label>
-                            <input type="number" name="min_group_size" class="form-input" placeholder="1" min="1" max="50" required>
-                            <div class="error-message" id="min_group_sizeError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Tamaño Máximo de Grupo</label>
-                            <input type="number" name="max_group_size" class="form-input" placeholder="20" min="1" max="200" required>
-                            <div class="error-message" id="max_group_sizeError"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 4: Documentos -->
-                <div class="step-content" data-step="4">
-                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--verde-selva); margin-bottom: 1.5rem;">
-                        Documentos y Certificaciones
-                    </h3>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label required">Logo de la Empresa</label>
-                            <div class="file-upload">
-                                <input type="file" name="logo" class="file-upload-input" accept="image/*" required>
-                                <label class="file-upload-label">
-                                    <i class="fas fa-upload"></i>
-                                    <span>Subir Logo (máx. 2MB)</span>
-                                </label>
-                            </div>
-                            <div class="error-message" id="logoError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label required">Licencia de Funcionamiento</label>
-                            <div class="file-upload">
-                                <input type="file" name="business_license" class="file-upload-input" accept=".pdf,.jpg,.jpeg,.png" required>
-                                <label class="file-upload-label">
-                                    <i class="fas fa-file-pdf"></i>
-                                    <span>Subir Licencia (máx. 5MB)</span>
-                                </label>
-                            </div>
-                            <div class="error-message" id="business_licenseError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Licencia Turística</label>
-                            <div class="file-upload">
-                                <input type="file" name="tourism_license" class="file-upload-input" accept=".pdf,.jpg,.jpeg,.png">
-                                <label class="file-upload-label">
-                                    <i class="fas fa-file-pdf"></i>
-                                    <span>Subir Licencia (máx. 5MB)</span>
-                                </label>
-                            </div>
-                            <div class="error-message" id="tourism_licenseError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Certificado de Seguro</label>
-                            <div class="file-upload">
-                                <input type="file" name="insurance_certificate" class="file-upload-input" accept=".pdf,.jpg,.jpeg,.png">
-                                <label class="file-upload-label">
-                                    <i class="fas fa-file-pdf"></i>
-                                    <span>Subir Certificado (máx. 5MB)</span>
-                                </label>
-                            </div>
-                            <div class="error-message" id="insurance_certificateError"></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label">Galería de Imágenes</label>
-                            <div class="file-upload">
-                                <input type="file" name="gallery[]" class="file-upload-input" accept="image/*" multiple>
-                                <label class="file-upload-label">
-                                    <i class="fas fa-images"></i>
-                                    <span>Subir Imágenes (máx. 3MB c/u)</span>
-                                </label>
-                            </div>
-                            <div class="gallery-preview" id="galleryPreview"></div>
-                            <div class="error-message" id="galleryError"></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label">Certificaciones</label>
-                            <div id="certificationsContainer">
-                                <div class="form-group">
-                                    <input type="text" name="certifications[]" class="form-input" placeholder="Ej: ISO 9001, IATA, etc.">
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-secondary" onclick="addCertification()">
-                                <i class="fas fa-plus"></i> Agregar Certificación
-                            </button>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label class="form-label">Premios y Reconocimientos</label>
-                            <div id="awardsContainer">
-                                <div class="form-group">
-                                    <input type="text" name="awards[]" class="form-input" placeholder="Ej: Mejor Empresa Turística 2023">
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-secondary" onclick="addAward()">
-                                <i class="fas fa-plus"></i> Agregar Premio
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 5: Finalizar -->
-                <div class="step-content" data-step="5">
+                <!-- Step 3: Crear cuenta -->
+                <div class="step-content" data-step="3">
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--verde-selva); margin-bottom: 1.5rem;">
                         Crear Cuenta de Usuario
                     </h3>
@@ -850,7 +658,7 @@
                     </button>
                     
                     <div style="font-size: 0.9rem; color: var(--gris-medio);" id="stepInfo">
-                        Paso 1 de 5
+                        Paso 1 de 3
                     </div>
                     
                     <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
@@ -864,8 +672,8 @@
 
     <script>
         // Variables globales
-        let currentStep = 1;
-        const totalSteps = 5;
+    let currentStep = 1;
+    const totalSteps = 3;
         let stepData = {};
 
         // Configurar CSRF token
@@ -873,118 +681,8 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            loadServices();
-            loadLanguages();
-            setupFileUploads();
             setupAvailabilityChecks();
         });
-
-        // Cargar servicios disponibles
-        async function loadServices() {
-            try {
-                const response = await fetch('/company/register/services');
-                const services = await response.json();
-                
-                const container = document.getElementById('servicesGroup');
-                container.innerHTML = services.map(service => `
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="services[]" value="${service}">
-                        <span>${service}</span>
-                    </label>
-                `).join('');
-                
-                setupCheckboxes();
-            } catch (error) {
-                console.error('Error loading services:', error);
-            }
-        }
-
-        // Cargar idiomas disponibles
-        async function loadLanguages() {
-            try {
-                const response = await fetch('/company/register/languages');
-                const languages = await response.json();
-                
-                const container = document.getElementById('languagesGroup');
-                container.innerHTML = languages.map(language => `
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="languages[]" value="${language}">
-                        <span>${language}</span>
-                    </label>
-                `).join('');
-                
-                setupCheckboxes();
-            } catch (error) {
-                console.error('Error loading languages:', error);
-            }
-        }
-
-        // Configurar checkboxes
-        function setupCheckboxes() {
-            document.querySelectorAll('.checkbox-item').forEach(item => {
-                const checkbox = item.querySelector('input[type="checkbox"]');
-                
-                item.addEventListener('click', function(e) {
-                    if (e.target !== checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                    }
-                    
-                    if (checkbox.checked) {
-                        item.classList.add('checked');
-                    } else {
-                        item.classList.remove('checked');
-                    }
-                });
-            });
-        }
-
-        // Configurar file uploads
-        function setupFileUploads() {
-            document.querySelectorAll('.file-upload').forEach(upload => {
-                const input = upload.querySelector('.file-upload-input');
-                const label = upload.querySelector('.file-upload-label');
-                
-                input.addEventListener('change', function() {
-                    const files = this.files;
-                    if (files.length > 0) {
-                        label.classList.add('has-file');
-                        
-                        if (files.length === 1) {
-                            label.innerHTML = `<i class="fas fa-check"></i> <span>${files[0].name}</span>`;
-                        } else {
-                            label.innerHTML = `<i class="fas fa-check"></i> <span>${files.length} archivos seleccionados</span>`;
-                        }
-                        
-                        // Preview para galería
-                        if (this.name === 'gallery[]') {
-                            previewGallery(files);
-                        }
-                    }
-                });
-            });
-        }
-
-        // Preview de galería
-        function previewGallery(files) {
-            const container = document.getElementById('galleryPreview');
-            container.innerHTML = '';
-            
-            Array.from(files).forEach((file, index) => {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const div = document.createElement('div');
-                        div.className = 'gallery-item';
-                        div.innerHTML = `
-                            <img src="${e.target.result}" alt="Preview">
-                            <button type="button" class="remove-btn" onclick="removeGalleryItem(${index})">×</button>
-                        `;
-                        container.appendChild(div);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
 
         // Configurar verificación de disponibilidad
         function setupAvailabilityChecks() {
@@ -1105,6 +803,10 @@
 
         // Validar paso actual
         async function validateCurrentStep() {
+            if (currentStep === totalSteps) {
+                return true;
+            }
+
             const formData = new FormData(document.getElementById('registrationForm'));
             formData.append('step', currentStep);
             
@@ -1176,7 +878,7 @@
             
             try {
                 const formData = new FormData(document.getElementById('registrationForm'));
-                formData.append('step', 5);
+                formData.append('step', totalSteps);
                 
                 const response = await fetch('/company/register', {
                     method: 'POST',
@@ -1244,38 +946,6 @@
                     document.body.removeChild(notification);
                 }, 300);
             }, 5000);
-        }
-
-        // Agregar certificación
-        function addCertification() {
-            const container = document.getElementById('certificationsContainer');
-            const div = document.createElement('div');
-            div.className = 'form-group';
-            div.innerHTML = `
-                <input type="text" name="certifications[]" class="form-input" placeholder="Ej: ISO 9001, IATA, etc.">
-                <button type="button" onclick="this.parentElement.remove()" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ef4444;">×</button>
-            `;
-            div.style.position = 'relative';
-            container.appendChild(div);
-        }
-
-        // Agregar premio
-        function addAward() {
-            const container = document.getElementById('awardsContainer');
-            const div = document.createElement('div');
-            div.className = 'form-group';
-            div.innerHTML = `
-                <input type="text" name="awards[]" class="form-input" placeholder="Ej: Mejor Empresa Turística 2023">
-                <button type="button" onclick="this.parentElement.remove()" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ef4444;">×</button>
-            `;
-            div.style.position = 'relative';
-            container.appendChild(div);
-        }
-
-        // Remover item de galería
-        function removeGalleryItem(index) {
-            // Esta función se implementaría para remover items específicos
-            console.log('Remove gallery item:', index);
         }
     </script>
 </body>

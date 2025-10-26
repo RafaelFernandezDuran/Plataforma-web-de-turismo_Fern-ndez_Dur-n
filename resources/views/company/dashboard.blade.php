@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/chanchamayo.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="dashboard-layout">
+<body class="dashboard-layout company-dashboard">
     <!-- Header -->
     <header class="dashboard-header">
         <div class="container">
@@ -117,8 +117,15 @@
             <div class="dashboard-content">
                 <!-- Page Header -->
                 <div class="page-header">
-                    <h1>Dashboard</h1>
-                    <p>Bienvenido de vuelta, gestiona tu empresa turística desde aquí</p>
+                    <div class="page-header-meta">
+                        <span class="page-badge">Panel empresarial</span>
+                        <h1>Dashboard</h1>
+                        <p>Bienvenido de vuelta, gestiona tu empresa turística desde aquí</p>
+                    </div>
+                    <a href="{{ route('company.tours.create') }}" class="page-header-cta">
+                        <i class="fas fa-feather"></i>
+                        Crear tour destacado
+                    </a>
                 </div>
 
                 <!-- Company Status Alert -->
