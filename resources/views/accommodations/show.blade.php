@@ -12,13 +12,11 @@
     <link rel="stylesheet" href="{{ asset('css/accommodations.css') }}">
 </head>
 @php
-    $heroImage = $accommodation->main_image
-        ? (\Illuminate\Support\Str::startsWith($accommodation->main_image, ['http://', 'https://'])
-            ? $accommodation->main_image
-            : asset('storage/' . ltrim($accommodation->main_image, '/')))
-        : 'https://images.unsplash.com/photo-1505692794403-55b39bff9c79?auto=format&fit=crop&w=1200&q=80';
+    $heroImage = $accommodation->image_url ?? asset('images/vista-a-la-piscina.jpg');
 @endphp
-<body>
+<body class="page-with-navbar">
+    @include('partials.site-header')
+
     <header class="accommodation-hero" style="background-image: url('{{ $heroImage }}')">
         <div class="hero-overlay"></div>
         <div class="hero-content container">
@@ -84,18 +82,15 @@
                     </ul>
                 @endif
 
-                @if($accommodation->gallery && count($accommodation->gallery) > 0)
+                @php
+                    $galleryImages = $accommodation->gallery_urls;
+                @endphp
+
+                @if(count($galleryImages) > 0)
                     <h3>Galería</h3>
                     <div class="gallery-grid">
-                        @foreach($accommodation->gallery as $image)
-                            @php
-                                $galleryImage = $image
-                                    ? (\Illuminate\Support\Str::startsWith($image, ['http://', 'https://'])
-                                        ? $image
-                                        : asset('storage/' . ltrim($image, '/')))
-                                    : 'https://images.unsplash.com/photo-1542317854-496a2b0fee3e?auto=format&fit=crop&w=800&q=80';
-                            @endphp
-                            <img src="{{ $galleryImage }}" alt="Foto de {{ $accommodation->name }}">
+                        @foreach($galleryImages as $imageUrl)
+                            <img src="{{ $imageUrl }}" alt="Foto de {{ $accommodation->name }}">
                         @endforeach
                     </div>
                 @endif
@@ -200,11 +195,7 @@
                 <div class="related-grid">
                     @foreach($related as $item)
                         @php
-                            $relatedImage = $item->main_image
-                                ? (\Illuminate\Support\Str::startsWith($item->main_image, ['http://', 'https://'])
-                                    ? $item->main_image
-                                    : asset('storage/' . ltrim($item->main_image, '/')))
-                                : 'https://images.unsplash.com/photo-1512914890250-353c87e1c36f?auto=format&fit=crop&w=800&q=80';
+                            $relatedImage = $item->image_url ?? asset('images/getlstd-property-photo.jpg');
                         @endphp
                         <article class="related-card">
                             <div class="card-image" style="background-image: url('{{ $relatedImage }}')"></div>

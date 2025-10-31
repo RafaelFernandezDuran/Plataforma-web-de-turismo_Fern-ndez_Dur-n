@@ -18,43 +18,6 @@
 
         .bookings-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .bookings-header h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .bookings-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1f2937;
         }
 
         .stat-label {
@@ -321,46 +284,10 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <nav class="nav-container">
-            <div class="nav-left">
-                <a href="/" class="logo">
-                    <i class="fas fa-mountain"></i>
-                    <span>Chanchamayo Tours</span>
-                </a>
-            </div>
-            <div class="nav-center">
-                <ul class="nav-menu">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/tours">Tours</a></li>
-                    <li><a href="/bookings" class="active">Mis Reservas</a></li>
-                    <li><a href="/contact">Contacto</a></li>
-                </ul>
-            </div>
-            <div class="nav-right">
-                @auth
-                    <div class="user-menu">
-                        <span>Hola, {{ Auth::user()->name }}</span>
-                        <div class="dropdown">
-                            <a href="{{ route('bookings.index') }}">Mis Reservas</a>
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Cerrar Sesión</button>
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <div class="auth-buttons">
-                        <a href="{{ route('login') }}">Iniciar Sesión</a>
-                        <a href="{{ route('register') }}" class="btn-primary">Registrarse</a>
-                    </div>
-                @endauth
-            </div>
-        </nav>
-    </header>
-<div class="bookings-container">
+<body class="page-with-navbar">
+    @include('partials.site-header')
+
+    <div class="bookings-container">
     <div class="bookings-header">
         <h1><i class="fas fa-calendar-check"></i> Mis Reservas</h1>
         <p>Gestiona todas tus reservas de tours en un solo lugar</p>
@@ -452,9 +379,12 @@
                 <div class="booking-card">
                     <div class="booking-content">
                         <div class="booking-image-container">
-                            @if($booking->tour->main_image)
-                                <img src="{{ Storage::url($booking->tour->main_image) }}" 
-                                     alt="{{ $booking->tour->title }}" 
+                            @php
+                                $tourImage = $booking->tour->image_url;
+                            @endphp
+                            @if($tourImage)
+                                <img src="{{ $tourImage }}"
+                                     alt="{{ $booking->tour->title }}"
                                      class="booking-image">
                             @else
                                 <div class="booking-image-placeholder">
@@ -518,7 +448,7 @@
             </a>
         </div>
     @endif
-</div>
+    </div>
 
 </body>
 </html>

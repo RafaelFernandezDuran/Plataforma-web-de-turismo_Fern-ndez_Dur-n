@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Tour;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -105,8 +106,31 @@ class BookingController extends Controller
             abort(403, 'No tienes permiso para ver esta reserva.');
         }
 
-        $booking->load(['tour', 'user']);
+        $booking->load(['tour.company', 'user']);
         return view('bookings.show', compact('booking'));
+    }
+
+    /**
+     * Generate a PDF receipt for the specified booking.
+     */
+    public function downloadPdf(Booking $booking)
+    {
+        if (Auth::user()->role === 'user' && $booking->user_id !== Auth::id()) {
+            abort(403, 'No tienes permiso para descargar esta reserva.');
+        }
+
+        $booking->load(['tour.company', 'user']);
+
+        $pdf = Pdf::loadView('bookings.pdf', [
+            'booking' => $booking,
+        ]);
+
+        $pdf->setPaper('a4');
+        $pdf->setOption('isRemoteEnabled', true);
+
+        $fileName = 'reserva-' . $booking->booking_number . '.pdf';
+
+        return $pdf->download($fileName);
     }
 
     /**

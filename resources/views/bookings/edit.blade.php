@@ -245,9 +245,12 @@
         <p>Puedes modificar los detalles de tu reserva mientras esté en estado pendiente</p>
         
         <div class="tour-summary">
-            @if($booking->tour->main_image)
-                <img src="{{ Storage::url($booking->tour->main_image) }}" 
-                     alt="{{ $booking->tour->title }}" 
+            @php
+                $tourImage = $booking->tour->image_url;
+            @endphp
+            @if($tourImage)
+                <img src="{{ $tourImage }}"
+                     alt="{{ $booking->tour->title }}"
                      class="tour-image-small">
             @endif
             

@@ -30,32 +30,7 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- Glassmorphism Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="container nav-container">
-            <a href="/" class="logo" aria-label="Chanchamayo Tours - Página principal">
-                <i class="fas fa-leaf" aria-hidden="true"></i>
-                Chanchamayo Tours
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/tours">Tours</a></li>
-                <li><a href="{{ route('accommodations.index') }}">Alojamientos</a></li>
-                <li><a href="#categorias">Categorías</a></li>
-                <li><a href="{{ route('company.register') }}">Registrar Empresa</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-                @auth
-                    <li><a href="/dashboard">Dashboard</a></li>
-                @else
-                    <li><a href="/login">Iniciar Sesión</a></li>
-                    <li><a href="/register" class="btn-primary">Registrarse</a></li>
-                @endauth
-            </ul>
-            <button class="nav-toggle" id="navToggle" aria-label="Abrir menú de navegación">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </nav>
+    @include('partials.site-header')
 
     <!-- Hero Section with Video -->
     <section class="hero">
@@ -413,9 +388,8 @@
                 <div class="accommodations-grid">
                     @foreach($accommodations as $accommodation)
                         @php
-                            $imagePath = $accommodation->main_image
-                                ? asset('storage/' . ltrim($accommodation->main_image, '/'))
-                                : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&auto=format&fit=crop';
+                            $imagePath = $accommodation->image_url
+                                ?? asset('images/piramide-chanchamayo.jpg');
                         @endphp
 
                         <article class="accommodation-card" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 100 }}">
@@ -777,25 +751,6 @@
             // Initial play attempt
             setTimeout(forcePlay, 500);
         }
-
-        // Mobile Navigation
-        const navToggle = document.getElementById('navToggle');
-        const navLinks = document.getElementById('navLinks');
-        
-        if (navToggle && navLinks) {
-            navToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                const icon = navToggle.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            });
-        }
-
-        // Navbar Scroll Effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            navbar.classList.toggle('scrolled', window.scrollY > 100);
-        });
 
         // Counter Animation
         function animateCounters() {

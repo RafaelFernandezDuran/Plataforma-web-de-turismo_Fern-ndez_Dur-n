@@ -18,43 +18,10 @@
 
         .booking-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            color: #ffffff;
             padding: 2rem;
             border-radius: 16px;
             margin-bottom: 2rem;
-        }
-
-        .tour-summary {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .tour-image-small {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .tour-info h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .tour-price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-top: 0.5rem;
-        }
-
-        .booking-form {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 2rem;
         }
 
         .form-section {
@@ -217,52 +184,18 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <nav class="nav-container">
-            <div class="nav-left">
-                <a href="/" class="logo">
-                    <i class="fas fa-mountain"></i>
-                    <span>Chanchamayo Tours</span>
-                </a>
-            </div>
-            <div class="nav-center">
-                <ul class="nav-menu">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/tours" class="active">Tours</a></li>
-                    <li><a href="/about">Nosotros</a></li>
-                    <li><a href="/contact">Contacto</a></li>
-                </ul>
-            </div>
-            <div class="nav-right">
-                @auth
-                    <div class="user-menu">
-                        <span>Hola, {{ Auth::user()->name }}</span>
-                        <div class="dropdown">
-                            <a href="{{ route('bookings.index') }}">Mis Reservas</a>
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Cerrar Sesión</button>
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <div class="auth-buttons">
-                        <a href="{{ route('login') }}">Iniciar Sesión</a>
-                        <a href="{{ route('register') }}" class="btn-primary">Registrarse</a>
-                    </div>
-                @endauth
-            </div>
-        </nav>
-    </header>
+<body class="page-with-navbar booking-create-page">
+    @include('partials.site-header')
 
-<div class="booking-container">
-    <div class="booking-header">
+    <div class="booking-container">
+        <div class="booking-header">
         <div class="tour-summary">
-            @if($tour->main_image)
-                <img src="{{ Storage::url($tour->main_image) }}" 
-                     alt="{{ $tour->title }}" 
+            @php
+                $tourImage = $tour->image_url;
+            @endphp
+            @if($tourImage)
+                <img src="{{ $tourImage }}"
+                     alt="{{ $tour->title }}"
                      class="tour-image-small">
             @else
                 <div class="tour-image-placeholder" style="width: 80px; height: 80px;">
@@ -395,7 +328,7 @@
             </button>
         </div>
     </form>
-</div>
+    </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

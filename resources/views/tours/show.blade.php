@@ -12,39 +12,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <meta name="description" content="{{ Str::limit($tour->description, 160) }}">
 </head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="nav-brand">
-                <a href="/" class="logo">
-                    <i class="fas fa-mountain"></i>
-                    Chanchamayo Tours
-                </a>
-            </div>
-            
-            <nav class="nav">
-                <ul class="nav-links">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="{{ route('tours.index') }}">Tours</a></li>
-                    <li><a href="#categorias">Categorías</a></li>
-                    <li><a href="{{ route('company.register') }}">Registrar Empresa</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                    @auth
-                        <li><a href="/dashboard">Dashboard</a></li>
-                    @else
-                        <li><a href="/login">Iniciar Sesión</a></li>
-                        <li><a href="/register" class="btn-primary">Registrarse</a></li>
-                    @endauth
-                </ul>
-            </nav>
-        </div>
-    </header>
+<body class="page-with-navbar">
+    @include('partials.site-header')
 
     <!-- Tour Hero -->
     <section class="tour-hero">
         <div class="tour-hero-image">
-            <img src="/images/kimiri.jpg" alt="{{ $tour->title }} - Puente Colgante Kimiri">
+            <img src="{{ $tour->image_url ?? asset('images/kimiri.jpg') }}" alt="{{ $tour->title }}">
             
             <div class="tour-hero-overlay">
                 <div class="container">
@@ -305,60 +279,32 @@
                     <div class="tour-section">
                         <h2>Galería</h2>
                         <div class="tour-gallery">
-                            <div class="gallery-item">
-                                <img src="/images/kimiri.jpg" 
-                                     alt="Puente Colgante Kimiri - Chanchamayo" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
+                            @php
+                                $galleryImages = $tour->gallery_urls;
+                            @endphp
+                            @if(count($galleryImages) > 0)
+                                @foreach($galleryImages as $imageUrl)
+                                    <div class="gallery-item">
+                                        <img src="{{ $imageUrl }}"
+                                             alt="Galería - {{ $tour->title }}"
+                                             loading="lazy"
+                                             onclick="openLightbox(this.src)">
+                                        <div class="gallery-overlay">
+                                            <i class="fas fa-expand-alt"></i>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="gallery-item">
+                                    <img src="{{ $tour->image_url ?? asset('images/kimiri.jpg') }}"
+                                         alt="Galería - {{ $tour->title }}"
+                                         loading="lazy"
+                                         onclick="openLightbox(this.src)">
+                                    <div class="gallery-overlay">
+                                        <i class="fas fa-expand-alt"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop&crop=center" 
-                                     alt="Naturaleza exuberante" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
-                                </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop&crop=center" 
-                                     alt="Aventura en la naturaleza" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
-                                </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1501436513145-30f24e19fcc4?w=400&h=300&fit=crop&crop=center" 
-                                     alt="Paisajes increíbles" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
-                                </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1486022651794-422d90647281?w=400&h=300&fit=crop&crop=center" 
-                                     alt="Flora tropical" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
-                                </div>
-                            </div>
-                            <div class="gallery-item">
-                                <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=300&fit=crop&crop=center" 
-                                     alt="Actividades al aire libre" 
-                                     loading="lazy"
-                                     onclick="openLightbox(this.src)">
-                                <div class="gallery-overlay">
-                                    <i class="fas fa-expand-alt"></i>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
 
@@ -487,9 +433,12 @@
                     @foreach($relatedTours as $relatedTour)
                         <article class="tour-card">
                             <div class="tour-image">
-                                @if($relatedTour->main_image)
-                                    <img src="{{ Storage::url($relatedTour->main_image) }}" 
-                                         alt="{{ $relatedTour->title }}" 
+                                @php
+                                    $relatedImage = $relatedTour->image_url;
+                                @endphp
+                                @if($relatedImage)
+                                    <img src="{{ $relatedImage }}"
+                                         alt="{{ $relatedTour->title }}"
                                          loading="lazy">
                                 @else
                                     <div class="tour-image-placeholder">

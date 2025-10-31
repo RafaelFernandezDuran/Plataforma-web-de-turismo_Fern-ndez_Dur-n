@@ -222,11 +222,47 @@ class Tour extends Model
             if (filter_var($this->main_image, FILTER_VALIDATE_URL)) {
                 return $this->main_image;
             }
-            // Si es un archivo local, usamos Storage
-            return asset('storage/' . $this->main_image);
+
+            $normalizedPath = ltrim($this->main_image, '/');
+
+            // Si la ruta apunta al directorio public, usamos asset directo
+            if (str_starts_with($normalizedPath, 'images/')) {
+                return asset($normalizedPath);
+            }
+
+            // Si es un archivo almacenado en storage/app/public
+            return asset('storage/' . $normalizedPath);
         }
         
         return null;
+    }
+
+    /**
+     * Get gallery image URLs with proper asset resolution
+     */
+    public function getGalleryUrlsAttribute(): array
+    {
+        if (!is_array($this->gallery) || empty($this->gallery)) {
+            return [];
+        }
+
+        return collect($this->gallery)
+            ->filter()
+            ->map(function ($image) {
+                if (filter_var($image, FILTER_VALIDATE_URL)) {
+                    return $image;
+                }
+
+                $normalizedPath = ltrim($image, '/');
+
+                if (str_starts_with($normalizedPath, 'images/')) {
+                    return asset($normalizedPath);
+                }
+
+                return asset('storage/' . $normalizedPath);
+            })
+            ->values()
+            ->all();
     }
 
     /**

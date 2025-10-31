@@ -159,11 +159,14 @@
                 @if($tours->count() > 0)
                     <div class="tours-container" id="tours-grid">
                         @foreach($tours as $tour)
-                            <div class="tour-card-admin">
+                                <div class="tour-card-admin">
                                 <div class="tour-image">
-                                    @if($tour->main_image)
-                                        <img src="{{ Storage::url($tour->main_image) }}" 
-                                             alt="{{ $tour->title }}" 
+                                    @php
+                                        $tourImage = $tour->image_url;
+                                    @endphp
+                                    @if($tourImage)
+                                        <img src="{{ $tourImage }}"
+                                             alt="{{ $tour->title }}"
                                              loading="lazy">
                                     @else
                                         <div class="tour-image-placeholder">

@@ -64,4 +64,73 @@ class Accommodation extends Model
     {
         return 'slug';
     }
+
+    /**
+     * Get the full URL for the main image.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->main_image) {
+            return null;
+        }
+
+        if (filter_var($this->main_image, FILTER_VALIDATE_URL)) {
+            return $this->main_image;
+        }
+
+        $normalizedPath = ltrim($this->main_image, '/');
+
+        if (str_starts_with($normalizedPath, 'images/')) {
+            return asset($normalizedPath);
+        }
+
+        return asset('storage/' . $normalizedPath);
+    }
+
+    /**
+     * Get an optimized image URL when possible.
+     */
+    public function getOptimizedImageAttribute(): ?string
+    {
+        $imageUrl = $this->image_url;
+
+        if (!$imageUrl) {
+            return null;
+        }
+
+        if (str_contains($imageUrl, 'unsplash.com')) {
+            $separator = str_contains($imageUrl, '?') ? '&' : '?';
+            return $imageUrl . $separator . 'auto=format&fit=crop&w=900&q=80';
+        }
+
+        return $imageUrl;
+    }
+
+    /**
+     * Resolve gallery image URLs.
+     */
+    public function getGalleryUrlsAttribute(): array
+    {
+        if (!is_array($this->gallery) || empty($this->gallery)) {
+            return [];
+        }
+
+        return collect($this->gallery)
+            ->filter()
+            ->map(function ($image) {
+                if (filter_var($image, FILTER_VALIDATE_URL)) {
+                    return $image;
+                }
+
+                $normalizedPath = ltrim($image, '/');
+
+                if (str_starts_with($normalizedPath, 'images/')) {
+                    return asset($normalizedPath);
+                }
+
+                return asset('storage/' . $normalizedPath);
+            })
+            ->values()
+            ->all();
+    }
 }

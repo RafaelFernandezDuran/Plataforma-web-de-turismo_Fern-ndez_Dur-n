@@ -204,6 +204,11 @@
             color: white;
         }
 
+        .btn-download {
+            background: #f97316;
+            color: white;
+        }
+
         .btn-confirm {
             background: #3b82f6;
             color: white;
@@ -287,46 +292,10 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <nav class="nav-container">
-            <div class="nav-left">
-                <a href="/" class="logo">
-                    <i class="fas fa-mountain"></i>
-                    <span>Chanchamayo Tours</span>
-                </a>
-            </div>
-            <div class="nav-center">
-                <ul class="nav-menu">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a href="/tours">Tours</a></li>
-                    <li><a href="/bookings" class="active">Mis Reservas</a></li>
-                    <li><a href="/contact">Contacto</a></li>
-                </ul>
-            </div>
-            <div class="nav-right">
-                @auth
-                    <div class="user-menu">
-                        <span>Hola, {{ Auth::user()->name }}</span>
-                        <div class="dropdown">
-                            <a href="{{ route('bookings.index') }}">Mis Reservas</a>
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Cerrar Sesión</button>
-                            </form>
-                        </div>
-                    </div>
-                @else
-                    <div class="auth-buttons">
-                        <a href="{{ route('login') }}">Iniciar Sesión</a>
-                        <a href="{{ route('register') }}" class="btn-primary">Registrarse</a>
-                    </div>
-                @endauth
-            </div>
-        </nav>
-    </header>
-<div class="booking-detail-container">
+<body class="page-with-navbar">
+    @include('partials.site-header')
+
+    <div class="booking-detail-container">
     @if(session('success'))
         <div class="alert alert-success">
             <i class="fas fa-check-circle"></i>
@@ -361,9 +330,12 @@
             <div class="section">
                 <h3><i class="fas fa-mountain"></i> Información del Tour</h3>
                 <div class="tour-info">
-                    @if($booking->tour->main_image)
-                        <img src="{{ Storage::url($booking->tour->main_image) }}" 
-                             alt="{{ $booking->tour->title }}" 
+                    @php
+                        $tourImage = $booking->tour->image_url;
+                    @endphp
+                    @if($tourImage)
+                        <img src="{{ $tourImage }}"
+                             alt="{{ $booking->tour->title }}"
                              class="tour-image">
                     @else
                         <div class="tour-image-placeholder" style="width: 100px; height: 100px;">
@@ -512,6 +484,10 @@
                     </form>
                 @endif
                 
+                <a href="{{ route('bookings.pdf', $booking) }}" class="btn-action btn-download" target="_blank" rel="noopener">
+                    <i class="fas fa-file-pdf"></i> Descargar Comprobante
+                </a>
+
                 <a href="{{ route('bookings.index') }}" class="btn-action btn-back">
                     <i class="fas fa-arrow-left"></i> Mis Reservas
                 </a>
@@ -568,7 +544,7 @@
             </div>
         </form>
     </div>
-</div>
+    </div>
 
 <script>
 function showCancelModal() {

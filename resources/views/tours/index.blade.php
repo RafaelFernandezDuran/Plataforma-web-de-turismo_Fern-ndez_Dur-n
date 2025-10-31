@@ -30,31 +30,8 @@
         '4' => '4+ días',
     ];
 @endphp
-<body class="tours-page">
-    <header class="tours-header" id="site-header">
-        <div class="container header-inner">
-            <a href="{{ url('/') }}" class="brand">
-                <span class="brand-icon" aria-hidden="true"><i class="fas fa-globe-americas"></i></span>
-                <span class="brand-text">Chanchamayo Tours</span>
-            </a>
-            <nav class="main-nav" id="main-navigation" aria-label="Navegación principal">
-                <a href="{{ url('/') }}" class="nav-link">Inicio</a>
-                <a href="#experiencias" class="nav-link">Experiencias</a>
-                <a href="#categorias" class="nav-link">Categorías</a>
-                <a href="#planifica" class="nav-link">Planifica</a>
-                <a href="#contacto" class="nav-link">Contacto</a>
-            </nav>
-            <div class="header-actions">
-                <a href="{{ route('login') }}" class="nav-link">Iniciar sesión</a>
-                <a href="{{ route('company.register') }}" class="btn btn-primary">Registrar empresa</a>
-                <button class="mobile-menu-toggle" aria-expanded="false" aria-controls="main-navigation" aria-label="Abrir menú">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+<body class="tours-page page-with-navbar">
+    @include('partials.site-header')
 
     <main>
         <section class="hero" id="experiencias">

@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="{{ asset('css/chanchamayo.css') }}">
     <link rel="stylesheet" href="{{ asset('css/accommodations.css') }}">
 </head>
-<body>
+<body class="page-with-navbar">
+    @include('partials.site-header')
+
     <header class="accommodations-hero">
         <div class="hero-overlay"></div>
         <div class="hero-content container">
@@ -93,11 +95,9 @@
         <section class="accommodations-grid">
             @forelse($accommodations as $accommodation)
                 @php
-                    $cardImage = $accommodation->main_image
-                        ? (\Illuminate\Support\Str::startsWith($accommodation->main_image, ['http://', 'https://'])
-                            ? $accommodation->main_image
-                            : asset('storage/' . ltrim($accommodation->main_image, '/')))
-                        : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80';
+                    $cardImage = $accommodation->optimized_image
+                        ?? $accommodation->image_url
+                        ?? asset('images/vista-a-la-piscina.jpg');
                 @endphp
                 <article class="accommodation-card">
                     <div class="card-image" style="background-image: url('{{ $cardImage }}')">
